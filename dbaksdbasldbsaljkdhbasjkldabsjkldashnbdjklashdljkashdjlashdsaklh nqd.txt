@@ -29,7 +29,7 @@ local esp = {
     players = {},
     objects = {},
     chams = {}, 
-    enabled = true,
+    enabled = false,
     teamcheck = false,
     fontsize = 13,
     font = 2,
@@ -43,13 +43,13 @@ local esp = {
         viewangle = {enabled = true, outline = true, color = Color3fromRGB(255, 255, 255)},
     },
     settings_chams = {
-        enabled = true,
+        enabled = false,
         outline = true,
         fill_color = Color3fromRGB(255, 255, 255),
         outline_color = Color3fromRGB(0, 0, 0), 
         fill_transparency = 1,
         outline_transparency = 1,
-        autocolor = true,
+        autocolor = false,
         autocolor_outline = true,
         settings_autocolor = {
             visible = Color3fromRGB(0, 255, 0),
@@ -63,7 +63,7 @@ local esp = {
 }
 
 local self_cham = {
-    enabled = true,
+    enabled = false,
     outline = true,
     fill_color = Color3fromRGB(255, 255, 255),
     fill_transparency = 0.5,
