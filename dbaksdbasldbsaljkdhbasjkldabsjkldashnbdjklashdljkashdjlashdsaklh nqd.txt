@@ -1,0 +1,144 @@
+--[Main Variables]
+local ws = game["Workspace"]
+local plrs = game["Players"]
+local rs = game["RunService"]
+
+local plr = plrs.LocalPlayer
+local mouse = plr:GetMouse()
+local camera = workspace.CurrentCamera
+local worldToViewportPoint = camera.worldToViewportPoint
+
+--[Optimisation Variables]
+
+local Drawingnew = Drawing.new
+local Color3fromRGB = Color3.fromRGB
+local Vector3new = Vector3.new
+local Vector2new = Vector2.new
+local mathfloor = math.floor
+local mathceil = math.ceil
+
+--[Setup Table]
+
+local esp = {
+    players = {},
+    objects = {},
+    enabled = true,
+    fontsize = 13,
+    font = 2,
+    settings = {
+        box = {enabled = true, outline = true, color = Color3fromRGB(255, 255, 255)},
+        distance = {enabled = true, outline = false, color = Color3fromRGB(255, 255, 255)},
+        viewangle = {enabled = true, color = Color3fromRGB(255, 255, 255)},
+    }
+}
+
+esp.NewDrawing = function(type, properties)
+    local newDrawing = Drawingnew(type)
+
+    for i,v in next, properties or {} do
+        newDrawing[i] = v
+    end
+
+    return newDrawing
+end
+
+esp.NewPlayer = function(v)
+    esp.players[v] = {
+        boxOutline = esp.NewDrawing("Square", {Color = Color3fromRGB(0, 0, 0), Thickness = 3}),
+        box = esp.NewDrawing("Square", {Color = Color3fromRGB(255, 255, 255), Thickness = 1}),
+        healthBarOutline = esp.NewDrawing("Line", {Color = Color3fromRGB(0, 0, 0), Thickness = 3}),
+        healthBar = esp.NewDrawing("Line", {Color = Color3fromRGB(255, 255, 255), Thickness = 1}),
+        healthText = esp.NewDrawing("Text", {Color = Color3fromRGB(255, 255, 255), Outline = true, Center = true, Size = 13, Font = 2}),
+        distance = esp.NewDrawing("Text", {Color = Color3fromRGB(255, 255, 255), Outline = true, Center = true, Size = 13, Font = 2}),
+        viewAngle = esp.NewDrawing("Line", {Color = Color3fromRGB(255, 255, 255), Thickness = 1}),
+    }
+end
+
+for x,y in pairs(ws.Players:GetChildren()) do
+    for _,v in ipairs(y:GetChildren()) do
+        esp.NewPlayer(v)
+    end
+
+    y.ChildAdded:Connect(function(v)
+        esp.NewPlayer(v)
+    end)
+
+    y.ChildRemoved:Connect(function(v)
+        for i2,v2 in pairs(esp.players[v]) do
+            v2:Remove()
+        end
+    
+        esp.players[v] = nil
+    end)
+end
+
+plrs.PlayerAdded:Connect(esp.NewPlayer)
+
+local mainLoop = rs.RenderStepped:Connect(function()
+    for i,v in pairs(esp.players) do
+        if i ~= plr and i:FindFirstChild("Torso") and i:FindFirstChild("Head") then
+            local hrp = i.Torso
+            local head = i.Head
+
+            local Vector, onScreen = camera:WorldToViewportPoint(hrp.Position)
+    
+            local Size = (camera:WorldToViewportPoint(hrp.Position - Vector3new(0, 3, 0)).Y - camera:WorldToViewportPoint(hrp.Position + Vector3new(0, 2.6, 0)).Y) / 2
+            local BoxSize = Vector2new(mathfloor(Size * 1.5), mathfloor(Size * 1.9))
+            local BoxPos = Vector2new(mathfloor(Vector.X - Size * 1.5 / 2), mathfloor(Vector.Y - Size * 1.6 / 2))
+    
+            local BottomOffset = BoxSize.Y + BoxPos.Y + 1
+
+            if onScreen and esp.enabled then
+                if esp.settings.distance.enabled and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    v.distance.Position = Vector2new(BoxSize.X / 2 + BoxPos.X, BottomOffset)
+                    v.distance.Outline = esp.settings.distance.outline
+                    v.distance.Text = "[" .. mathfloor((hrp.Position - plr.Character.HumanoidRootPart.Position).Magnitude) .. "m]"
+                    v.distance.Color = esp.settings.distance.color
+                    BottomOffset = BottomOffset + 15
+
+                    v.distance.Font = esp.font
+                    v.distance.Size = esp.fontsize
+
+                    v.distance.Visible = true
+                else
+                    v.distance.Visible = false
+                end
+
+                if esp.settings.box.enabled then
+                    v.boxOutline.Size = BoxSize
+                    v.boxOutline.Position = BoxPos
+                    v.boxOutline.Visible = esp.settings.box.outline
+    
+                    v.box.Size = BoxSize
+                    v.box.Position = BoxPos
+                    v.box.Color = esp.settings.box.color
+                    v.box.Visible = true
+                else
+                    v.boxOutline.Visible = false
+                    v.box.Visible = false
+                end
+
+                if esp.settings.viewangle.enabled and head and head.CFrame then
+                    v.viewAngle.From = Vector2new(camera:worldToViewportPoint(head.CFrame.p).X, camera:worldToViewportPoint(head.CFrame.p).Y)
+                    v.viewAngle.To = Vector2new(camera:worldToViewportPoint((head.CFrame + (head.CFrame.lookVector * 10)).p).X, camera:worldToViewportPoint((head.CFrame + (head.CFrame.lookVector * 10)).p).Y)
+                    v.viewAngle.Color = esp.settings.viewangle.color
+                    v.viewAngle.Visible = true
+                else
+                    v.viewAngle.Visible = false
+                end
+            else
+                v.boxOutline.Visible = false
+                v.box.Visible = false
+                v.distance.Visible = false
+                v.viewAngle.Visible = false
+            end
+        else
+            v.boxOutline.Visible = false
+            v.box.Visible = false
+            v.distance.Visible = false
+            v.viewAngle.Visible = false
+        end
+    end
+end)
+
+getgenv().esp = esp
