@@ -1,0 +1,1393 @@
+local plrs = game["Players"]
+local client = {}
+local plr = plrs.LocalPlayer
+local Lighting = game:GetService("Lighting")
+local camera = workspace.CurrentCamera
+local cc = Instance.new("ColorCorrectionEffect", Lighting)
+local blur = Instance.new("BlurEffect",Lighting);blur.Size = 0
+local sun = Instance.new("SunRaysEffect",Lighting);sun.Intensity = 0
+local atmos = Instance.new("Atmosphere",Lighting)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local RunService = game:GetService("RunService")
+local active = false
+local uis = game:GetService("UserInputService")
+local UIS = game:GetService'UserInputService'
+local OldAmbient = Lighting.Ambient
+local OldTime = Lighting.TimeOfDay
+local OldTint = cc.TintColor
+local OldBright = cc.Brightness
+local OldCont = cc.Contrast
+local OldSaturation = cc.Saturation
+local EspLibrary = loadstring(game:HttpGet('https://gitfront.io/r/Samuel/Gw6t8rBAGPhN/My-scripts/raw/esp_library.lua'))()
+EspLibrary.settings.enabled = false
+EspLibrary.settings.refreshrate = 0.5
+EspLibrary.settings.teamcolor = false
+EspLibrary.settings.namesoutline = true
+EspLibrary.settings.distanceoutline = true
+EspLibrary.settings.boxesoutline = true
+
+local mod =
+{
+    enabled = false,
+    fov_circle = false,
+    fov_radius = 120,
+    fov_color = Color3.fromRGB(255, 255, 255),
+    target_part = "head",
+    toggleKey = Enum.UserInputType.MouseButton2
+}
+
+local circle = Drawing.new("Circle")
+circle.Visible = mod.fov_circle
+circle.Color = mod.fov_color
+circle.Radius = mod.fov_radius
+circle.Thickness = 1.5
+
+
+local gamelogic,CharTable,cam,char,network,hud
+for I,V in pairs(getgc(true)) do
+    if type(V) == "table" then
+        if rawget(V, "gammo") then
+            gamelogic = V
+        elseif rawget(V,"basecframe") then
+            cam = V
+        elseif rawget(V,"setbasewalkspeed") then
+			char = V
+        elseif rawget(V,"send") then 
+            network = V
+        elseif rawget(V,"updateammo") then
+            hud = V
+        end
+    elseif type(V) == "function" then
+        if debug.getinfo(V).name == "getbodyparts" then
+            CharTable = debug.getupvalue(V, 1)
+        end
+    end
+end
+EspLibrary:Init()
+function EspLibrary:GetHealth(Player)
+    return hud:getplayerhealth(Player)
+end
+function EspLibrary:GetCharacter(Player)
+    local Character = CharTable[Player]
+
+    return Character and Character.torso.Parent, Character and Character.torso
+end
+local oldjump = char.jump
+local Skyboxes = {
+		["Purple Nebula"] = {
+        ["SkyboxBk"] = "rbxassetid://159454299",
+        ["SkyboxDn"] = "rbxassetid://159454296",
+        ["SkyboxFt"] = "rbxassetid://159454293",
+        ["SkyboxLf"] = "rbxassetid://159454286",
+        ["SkyboxRt"] = "rbxassetid://159454300",
+        ["SkyboxUp"] = "rbxassetid://159454288"
+		},
+
+		["Red Night"] = {
+        ["SkyboxBk"] = "rbxassetid://401664839",
+        ["SkyboxDn"] = "rbxassetid://401664862",
+        ["SkyboxFt"] = "rbxassetid://401664960",
+        ["SkyboxLf"] = "rbxassetid://401664881",
+        ["SkyboxRt"] = "rbxassetid://401664901",
+        ["SkyboxUp"] = "rbxassetid://401664936"
+		},
+
+		["Dusty Clouds"] = {
+        ["SkyboxBk"] = "rbxassetid://252760981",
+        ["SkyboxDn"] = "rbxassetid://252763035",
+        ["SkyboxFt"] = "rbxassetid://252761439",
+        ["SkyboxLf"] = "rbxassetid://252760980",
+        ["SkyboxRt"] = "rbxassetid://252760986",
+        ["SkyboxUp"] = "rbxassetid://252762652"
+		},
+
+		["Night Sky"] = {
+        ["SkyboxBk"] = "rbxassetid://12064107",
+        ["SkyboxDn"] = "rbxassetid://12064152",
+        ["SkyboxFt"] = "rbxassetid://12064121",
+        ["SkyboxLf"] = "rbxassetid://12063984",
+        ["SkyboxRt"] = "rbxassetid://12064115",
+        ["SkyboxUp"] = "rbxassetid://12064131"
+		},
+
+		["Pink Daylight"] = {
+        ["SkyboxBk"] = "rbxassetid://271042516",
+        ["SkyboxDn"] = "rbxassetid://271077243",
+        ["SkyboxFt"] = "rbxassetid://271042556",
+        ["SkyboxLf"] = "rbxassetid://271042310",
+        ["SkyboxRt"] = "rbxassetid://271042467",
+        ["SkyboxUp"] = "rbxassetid://271077958"
+	}
+}
+-- ui 
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/vozoid/ui-libraries/main/drawing/void/source.lua"))()
+
+local watermark = library:Watermark("Ghostware [PHANTOM FORCE]")
+
+local main = library:Load{
+    Name = "GhostWare [PHANTOM FORCE]",
+    SizeX = 500,
+    SizeY = 600,
+    Theme = "Midnight",
+    Extension = "ghost", -- config file extension
+    Folder = "ghostware" -- config folder name
+}
+local Visuals = main:Tab("Visuals")
+local EspTab = main:Tab("ESP")
+local Misc = main:Tab("Misc")
+
+
+
+-- Visual Tab
+local EspSection = EspTab:Section{
+    Name = "ESP",
+    Side = "Left"
+}
+
+local LPSection = Visuals:Section{
+    Name = "Local Player",
+    Side = "Right"
+}
+
+local WorldSection = Visuals:Section{
+    Name = "World",
+    Side = "Left"
+}
+
+
+local ChamsSection = EspTab:Section{
+    Name = "Chams",
+    Side = "Right"
+}
+
+local crosshair = Visuals:Section{
+    Name = "Crosshair",
+    Side = "Left"
+}
+local design = game:HttpGet("https://i.ibb.co/Kbxwr86/Kovaa-K-Crosshair-1.png")
+local text = Drawing.new("Image")
+utility = function()
+  
+    local crossloop 
+    crossloop = game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+        if gamelogic.currentgun and gamelogic.currentgun.barrel and text.Visible == true then
+            local Pos, OnScreen = camera:WorldToViewportPoint(gamelogic.currentgun.barrel.CFrame * Vector3.new(0, 0, -10))
+			text.Position = Vector2.new(Pos.X - library.flags["crosshairx"], Pos.Y - library.flags["crosshairx"])
+			text.Data = design
+			    text.Size = Vector2.new(library.flags["crosshairsizeX"], library.flags["crosshairsizeY"])
+        end
+    end)
+end
+-- Crosshair
+local Enable_Crosshair = crosshair:Toggle{
+    Name = "Enable ",
+    Flag = "crosshair_toggle",
+    Default = false,
+    Callback  = function(bool)
+	   text.Visible = library.flags["crosshair_toggle"]
+	   utility()
+    end
+}
+
+Enable_Crosshair:Dropdown{
+    Default = "X",
+    Content = {
+        "X",
+        "BBOT",
+        "Triangle",
+		"Two Lines",
+		"Three Lines",
+		"Apex",
+		"Insane"
+    },
+    --Max = 5, -- turns into multidropdown
+    Scrollable = true, -- makes it scrollable
+    ScrollingMax = 3, -- caps the amount it contains before scrolling
+    Flag = "crosshair_design",
+    Callback = function(option)
+        if option == "X" then
+		design = game:HttpGet("https://i.ibb.co/Kbxwr86/Kovaa-K-Crosshair-1.png")	
+		elseif option == "BBOT" then
+		design = game:HttpGet("https://i.ibb.co/1L9dt7z/bbotcrosshair.png")
+		elseif option == "Triangle" then
+		design = game:HttpGet("https://i.ibb.co/yPssCGv/trhair.png")
+		elseif option == "Two Lines" then
+		design = game:HttpGet("https://i.ibb.co/B2WwF2c/2hair.png")
+		elseif option == "Three Lines" then
+		design = game:HttpGet("https://i.ibb.co/5BxSTw0/3hair.png")
+		elseif option == "Apex" then
+		design = game:HttpGet("https://i.ibb.co/MnTQjC2/Kovaa-K-Crosshair-2.png")
+		elseif option == "Insane" then
+		design = game:HttpGet("https://i.ibb.co/qpQDYJM/ins.png")
+		end
+	end
+}
+
+local crosshairx = crosshair:Slider{
+    Name = "Distance",
+    Text = "[value]/100",
+    Default = 10,
+    Min = 0,
+    Max = 100,
+    Float = 1,
+    Flag = "crosshairx",
+
+}
+
+local sizeX = crosshair:Slider{
+    Name = "Size X",
+    Text = "[value]/300",
+    Default = 20,
+    Min = 0,
+    Max = 300,
+    Float = 1,
+    Flag = "crosshairsizeX",
+
+}
+
+local sizeY = crosshair:Slider{
+    Name = "Size Y",
+    Text = "[value]/300",
+    Default = 20,
+    Min = 0,
+    Max = 300,
+    Float = 1,
+    Flag = "crosshairsizeY",
+
+}
+
+local BoxT = EspSection:Toggle{
+    Name = "Enable",
+    Flag = "esp_enable",
+    Callback = function(bool)
+        EspLibrary.settings.enabled = bool
+	end
+}
+
+local BoxT = EspSection:Toggle{
+    Name = "Box",
+    Flag = "box",
+    --Default = false,
+    Callback = function(bool)
+        EspLibrary.settings.boxes = bool
+	end
+}
+
+
+local togglepicker1 = BoxT:ColorPicker{
+    Default = Color3.fromRGB(252, 3, 3), 
+    Flag = "box color", 
+    Callback = function(color)
+	    EspLibrary.settings.boxescolor = color
+    end
+}
+
+-- Name Toggle
+local NameT = EspSection:Toggle{
+    Name = "Name",
+    Flag = "name",
+    --Default = false,
+    Callback  = function(bool)
+        EspLibrary.settings.names = bool
+    end
+}
+
+local togglepicker1 = NameT:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "name color", 
+    Callback = function(color)
+        EspLibrary.settings.namescolor = color
+    end
+}
+
+-- HealthBar Toggle
+local HealthBT = EspSection:Toggle{
+    Name = "Health Bar",
+    Flag = "healthb",
+    Callback  = function(bool)
+        EspLibrary.settings.healthbars = bool
+    end
+}
+
+local togglepicker1 = HealthBT:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "healtbcolor", 
+    Callback = function(color)
+        EspLibrary.settings.healthbarscolor = color
+    end
+}
+-- Distance Toggle
+local DistanceT = EspSection:Toggle{
+    Name = "Distance",
+    Flag = "distancet",
+    --Default = false,
+    Callback  = function(bool)
+        EspLibrary.settings.distance = bool
+    end
+}
+
+local togglepicker1 = DistanceT:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "distancecolor", 
+    Callback = function(color)
+        EspLibrary.settings.distancecolor = color
+    end
+}
+local tracer = EspSection:Toggle{
+    Name = "Tracers",
+    Flag = "Tracers",
+    Callback  = function(bool)
+        EspLibrary.settings.tracers = bool
+    end
+}
+
+local togglepicker1 = tracer:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "tracer color", 
+    Callback = function(color)
+        EspLibrary.settings.tracerscolor = color
+    end
+}
+
+
+
+local seperator = EspSection:Separator("Settings")
+
+
+local fontsize = EspSection:Slider{
+    Name = "Font Size",
+    Text = "[value]/18",
+    Default = 13,
+    Min = 0,
+    Max = 18,
+    Float = 1,
+    Flag = "font_size",
+    Callback = function(value)
+        EspLibrary.settings.textsize = value
+    end
+}
+
+local espdist = EspSection:Slider{
+    Name = "Health bar offset",
+    Text = "[value]/10",
+    Default = 0,
+    Min = 0,
+    Max = 10,
+    Float = 1,
+    Flag = "esp_healthboffset",
+    Callback = function(value)
+        EspLibrary.settings.healthbarsoffset = value
+    end
+}
+
+local espchecks = EspSection:Dropdown{
+    Name = "Esp Checks",
+    Max = 1, 
+    Content = {
+        "Team Check",
+    },
+    Flag = "esp_check",
+    Callback = function(option)
+        if option == "Team Check" then
+            EspLibrary.settings.teamcheck = true
+        else
+            EspLibrary.settings.teamcheck = false
+        end
+    end
+}
+
+local tracerpos = EspSection:Dropdown{
+    Name = "Tracer position",
+    Max = 1,
+    Content = {
+        "Bottom","Mouse","Top", "Left", "Right", "Center"
+    },
+    Flag = "tracer_pos",
+    Callback = function(option)
+        EspLibrary.settings.tracersorigin = option
+    end
+}
+
+local espfont = EspSection:Dropdown{
+    Name = "Font",
+    Max = 1,
+    Content = {
+        "Plex", "UI", "System", "Monospace"
+    },
+    Flag = "Font",
+    Callback = function(option)
+        EspLibrary.settings.textfont = Drawing.Fonts[option]
+    end
+}
+
+local weaponcham = LPSection:Toggle{
+    Name = "Weapon Chams",
+    Flag = "weapon",
+    Default = false,
+}
+
+local weaponcolor = weaponcham:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "weapon_color", 
+}
+
+local weaponmaterial = LPSection:Dropdown{
+    Name = "Weapon Material",
+    Default = "ForceField",
+    Content = {
+        "ForceField",
+        "Neon",
+        "Glass",
+		"SmoothPlastic"
+    },
+    Flag = "weapon_material",
+}
+
+local weapontrans = LPSection:Slider{
+    Name = "Weapon Transparency",
+    Text = "[value]/1",
+    Default = 0,
+    Min = 0,
+    Max = 1,
+    Float = 0.1,
+    Flag = "weapon_opacity",
+}
+
+local weapontexture = LPSection:Dropdown{
+    Name = "Weapon texture",
+    Default = "Bubbles",
+    Content = {
+        "Bubbles",
+		"Scanning"
+    },
+    Flag = "weapon_texture",
+}
+
+local armcham = LPSection:Toggle{
+    Name = "Arm Chams",
+    Flag = "arm",
+    Default = false,
+}
+
+local armcolor = armcham:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "arm_color", 
+}
+
+
+
+local armmaterial = LPSection:Dropdown{
+    Name = "Arm Material",
+    Default = "ForceField",
+    Content = { -- put deez nuts in your mouth
+        "ForceField",
+        "Neon",
+		"SmoothPlastic",
+        "Glass"
+    },
+    Flag = "arm_material",
+}
+
+local armtrans = LPSection:Slider{
+    Name = "Arm Transparency",
+    Text = "[value]/1",
+    Default = 0.1,
+    Min = 0,
+    Max = 1,
+    Float = 0.1,
+    Flag = "arm_opacity",
+}
+local armtexture = LPSection:Dropdown{
+    Name = "Arm texture",
+    Default = "Bubbles",
+    Content = {
+        "Bubbles",
+		"Scanning"
+    },
+    Flag = "arm_texture",
+}
+-- Chams
+
+local ChamsT = ChamsSection:Toggle{
+    Name = "Chams",
+    Flag = "chamst",
+    Default = false,
+}
+
+local cham_out = ChamsSection:Toggle{
+    Name = "Outline",
+    Flag = "out_cham",
+    Default = false,
+}
+
+local togglepicker1 = ChamsT:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "chamscolor", 
+}
+
+local togglepicker2 = cham_out:ColorPicker{
+    Default = Color3.fromRGB(255, 255, 255), 
+    Flag = "Outline color", 
+}
+
+local ChamsTrans = ChamsSection:Slider{
+    Name = "Fill Transparency",
+    Text = "[value]/1",
+    Default = 0.5,
+    Min = 0,
+    Max = 1,
+    Float = 0.1,
+    Flag = "Chamstrans",
+}
+
+local ChamsTrans = ChamsSection:Slider{
+    Name = "Outline Transparency",
+    Text = "[value]/1",
+    Default = 0.5,
+    Min = 0,
+    Max = 1,
+    Float = 0.1,
+    Flag = "out_trans",
+}
+
+local dropdown = ChamsSection:Dropdown{
+    Name = "Chams Mode",
+    Default = "AlwaysOnTop",
+    Content = {
+        "AlwaysOnTop",
+        "Occlured"
+    },
+    Flag = "cham_mode",
+}
+
+
+-- World
+
+local BrightToggle = WorldSection:Toggle{
+    Name = "Brightness",
+    flag = "bright_tog"
+}
+
+
+
+local BrightnessS = WorldSection:Slider{
+    Name = "Brightness Amount",
+    Text = "[value]/1",
+    Default = 0,
+    Min = -1,
+    Max = 1,
+    Float = 0.01,
+    Flag = "Bright_amount",
+}
+
+
+
+local ContrastToggle = WorldSection:Toggle{
+    Name = "Contrast",
+    flag = "cont_tog"
+}
+
+
+
+local ContrastS = WorldSection:Slider{
+    Name = "Contrast Amount",
+    Text = "[value]/1",
+    Default = 0,
+    Min = -1,
+    Max = 1,
+    Float = 0.01,
+    Flag = "cont_amount",
+}
+
+local SaturationToggle = WorldSection:Toggle{
+    Name = "Saturation",
+    flag = "satur_tog"
+}
+
+
+
+local SaturationS = WorldSection:Slider{
+    Name = "Saturation Amount",
+    Text = "[value]/1",
+    Default = 0,
+    Min = -1,
+    Max = 1,
+    Float = 0.01,
+    Flag = "satur_amount",
+}
+
+local ambient = WorldSection:Toggle{
+    Name = "Ambient",
+    Flag = "ambient",
+}
+
+local Ambientcol = ambient:ColorPicker{
+    Name = "Ambient Color",
+    Default = Color3.fromRGB(255, 255, 255),
+    Flag = "ambient_col",
+}
+
+local forcetime = WorldSection:Toggle{
+    Name = "Force Time",
+    Flag = "force_time",
+}
+
+
+forcetime:Slider{
+    Text = "[value]/20",
+    Min = 0,
+    Max = 20,
+    Float = 1,
+    Flag = "time",
+}
+
+local SkyboxD = WorldSection:Dropdown{
+    Name = "Skybox",
+    Content = {
+        "Purple Nebula",
+        "Red Night",
+        "Dusty Clouds",
+		"Night Sky",
+    },
+    Flag = "skybox",
+    Callback = function(option)
+	local skybox = option
+	if skybox then
+		if Lighting:FindFirstChildOfClass("Sky") then Lighting:FindFirstChildOfClass("Sky"):Destroy() end
+			local Skybox = Instance.new("Sky")
+			Skybox.SkyboxLf = Skyboxes[skybox].SkyboxLf
+			Skybox.SkyboxBk = Skyboxes[skybox].SkyboxBk
+			Skybox.SkyboxDn = Skyboxes[skybox].SkyboxDn
+			Skybox.SkyboxFt = Skyboxes[skybox].SkyboxFt
+			Skybox.SkyboxRt = Skyboxes[skybox].SkyboxRt
+			Skybox.SkyboxUp = Skyboxes[skybox].SkyboxUp
+			Skybox.Name = "NewSky"
+			Skybox.Parent = Lighting
+		else
+			if Lighting:FindFirstChildOfClass("Sky") then
+				Lighting:FindFirstChildOfClass("Sky"):Destroy()
+			end
+		end
+    end
+}
+
+-- Visuals Misc
+
+
+
+local FOVS = WorldSection:Slider{
+    Name = "FOV",
+    Text = "[value]/120",
+    Default = 70,
+    Min = 70,
+    Max = 120,
+    Float = 2,
+    Flag = "FovS 1",
+
+}
+
+local ThirdpersonK = WorldSection:Keybind{
+    Name = "ThirdPerson",
+    Default = Enum.KeyCode.A,
+    Blacklist = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2},
+    Flag = "thirdpersonk"
+}
+
+local gaymods = Misc:Section{
+    Name = "gun mods",
+    Side = "Left"
+}
+
+local recoil = gaymods:Toggle{
+    Name = "Recoil",
+    flag = "recoil"
+}
+
+local recoilmod = gaymods:Slider{
+    Name = "recoil multiplier",
+    flag = "recoil_multi",
+    max = 1,
+    min = 0,
+    float = 0.001
+}
+
+local spread = gaymods:Toggle{
+    Name = "Spread",
+    flag = "spread"
+}
+
+local spreadmod = gaymods:Slider{
+    Name = "spread multiplier",
+    flag = "spread_multi",
+    max = 1,
+    min = 0,
+    float = 0.001
+}
+
+local firerate = gaymods:Toggle{
+    Name = "firerate",
+    flag = "firerate"
+}
+
+local spreadmod = gaymods:Slider{
+    Name = "firerate multiplier",
+    flag = "firerate_multi",
+    max = 100,
+    min = 0,
+    float = 1
+}
+
+local Exploits = Misc:Section{
+    Name = "Exploits",
+    Side = "Right"
+}
+
+local Walkspeed = Exploits:Toggle{
+    Name = "Walkspeed",
+    Flag = "walkspeed",
+}
+
+if library.flags["walkspeed"] then
+    char:setbasewalkspeed(library.flags.walk_speed)
+else
+    char:setbasewalkspeed(16)
+end
+
+
+
+Walkspeed:Slider{
+    Text = "[value]/80",
+    Min = 0,
+    Max = 80,
+    Float = 1,
+    Flag = "walk_speed"
+}
+
+local UDWalkspeed = Exploits:Toggle{
+    Name = "Walkspeed v2",
+    Flag = "walkspeed",
+    --Default = false,
+    Callback  = function(bool)
+        local UIS = game:GetService'UserInputService';
+		UIS.InputBegan:connect(function(UserInput)
+        if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == library.flags["speedkey"] then
+            _G.Running = true
+            _G.wait = library.flags["wait"]
+				while wait(_G.wait) and _G.Running == true and bool == true do
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * library.flags["walk_speed"]
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * library.flags["walk_speed"]
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * library.flags["walk_speed"]
+				end
+			end
+		end)
+		UIS.InputEnded:connect(function(UserInput)
+        if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.LeftShift then
+                _G.Running = false
+		end
+		end)
+    end
+}
+
+UDWalkspeed:Keybind{
+    Name = "Walksped Key",
+    --Default = Enum.KeyCode.Shift,
+    Blacklist = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2},
+    Flag = "speedkey",
+    Callback = function(key, fromsetting)
+	
+    end
+}
+
+UDWalkspeed:Slider{
+    Text = "Speed : [value]",
+    Default = 0.2,
+    Min = 0,
+    Max = 1,
+    Float = 0.1,
+    Flag = "walk_speed",
+    Callback = function(value)
+		
+	end
+}
+
+local walkspeedinterval = Exploits:Slider{
+    Name = "Tp Interval",
+	Text = "Invterval : [value]",
+    Default = 0.001,
+    Min = 0,
+    Max = 1,
+    Float = 0.001,
+    Flag = "wait",
+    Callback = function(value)
+		
+	end
+}
+
+local JumpBoost = Exploits:Toggle{
+    Name = "JumpBoost",
+    Flag = "jumpboost",
+
+}
+
+JumpBoost:Slider{
+    Text = "[value]/80",
+    Min = 0,
+    Max = 80,
+    Float = 1,
+    Flag = "jump_boost",
+}
+
+local falldamage = Exploits:Toggle{
+    Name = "No Fall Damage",
+    Flag = "fall_damage",
+}
+
+--library:SaveConfig("config", true) -- universal config
+--library:SaveConfig("config") -- game specific config
+--library:DeleteConfig("config", true) -- universal config
+--library:DeleteConfig("config") -- game specific config
+--library:GetConfigs(true) -- return universal and game specific configs (table)
+--library:GetConfigs() -- return game specific configs (table)
+--library:LoadConfig("config", true) -- load universal config
+--library:LoadConfig("config") -- load game specific config
+
+local configs = main:Tab("Settings")
+
+local Close = configs:Section{
+    Name = "UI Settings",
+    Side = "Right"
+}
+
+local keybind = Close:Keybind{
+    Name = "Toggle UI",
+    Default = Enum.KeyCode.End,
+    Blacklist = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2},
+    Flag = "Keybind 1",
+    Callback = function(key, fromsetting)
+        if fromsetting then
+        else
+            UIS.MouseIconEnabled = false
+			library:Close()
+        end
+    end
+}
+
+local unload = Close:Button{
+    Name = "Unload",
+    Callback  = function()
+        library:Unload()
+    end
+}
+
+local themes = configs:Section{Name = "Theme", Side = "Left"}
+
+local themepickers = {}
+
+local themelist = themes:Dropdown{
+    Name = "Theme",
+    Default = library.currenttheme,
+    Content = library:GetThemes(),
+    Flag = "Theme Dropdown",
+    Callback = function(option)
+        if option then
+            library:SetTheme(option)
+
+            for option, picker in next, themepickers do
+                picker:Set(library.theme[option])
+            end
+        end
+    end
+}
+
+library:ConfigIgnore("Theme Dropdown")
+
+local namebox = themes:Box{
+    Name = "Custom Theme Name",
+    Placeholder = "Custom Theme",
+    Flag = "Custom Theme"
+}
+
+library:ConfigIgnore("Custom Theme")
+
+themes:Button{
+    Name = "Save Custom Theme",
+    Callback = function()
+        if library:SaveCustomTheme(library.flags["Custom Theme"]) then
+            themelist:Refresh(library:GetThemes())
+            themelist:Set(library.flags["Custom Theme"])
+            namebox:Set("")
+        end
+    end
+}
+
+local customtheme = configs:Section{Name = "Custom Theme", Side = "Right"}
+
+themepickers["Accent"] = customtheme:ColorPicker{
+    Name = "Accent",
+    Default = library.theme["Accent"],
+    Flag = "Accent",
+    Callback = function(color)
+        library:ChangeThemeOption("Accent", color)
+    end
+}
+
+library:ConfigIgnore("Accent")
+
+themepickers["Window Background"] = customtheme:ColorPicker{
+    Name = "Window Background",
+    Default = library.theme["Window Background"],
+    Flag = "Window Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Window Background", color)
+    end
+}
+
+library:ConfigIgnore("Window Background")
+
+themepickers["Window Border"] = customtheme:ColorPicker{
+    Name = "Window Border",
+    Default = library.theme["Window Border"],
+    Flag = "Window Border",
+    Callback = function(color)
+        library:ChangeThemeOption("Window Border", color)
+    end
+}
+
+library:ConfigIgnore("Window Border")
+
+themepickers["Tab Background"] = customtheme:ColorPicker{
+    Name = "Tab Background",
+    Default = library.theme["Tab Background"],
+    Flag = "Tab Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Tab Background", color)
+    end
+}
+
+library:ConfigIgnore("Tab Background")
+
+themepickers["Tab Border"] = customtheme:ColorPicker{
+    Name = "Tab Border",
+    Default = library.theme["Tab Border"],
+    Flag = "Tab Border",
+    Callback = function(color)
+        library:ChangeThemeOption("Tab Border", color)
+    end
+}
+
+library:ConfigIgnore("Tab Border")
+
+themepickers["Tab Toggle Background"] = customtheme:ColorPicker{
+    Name = "Tab Toggle Background",
+    Default = library.theme["Tab Toggle Background"],
+    Flag = "Tab Toggle Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Tab Toggle Background", color)
+    end
+}
+
+library:ConfigIgnore("Tab Toggle Background")
+
+themepickers["Section Background"] = customtheme:ColorPicker{
+    Name = "Section Background",
+    Default = library.theme["Section Background"],
+    Flag = "Section Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Section Background", color)
+    end
+}
+
+library:ConfigIgnore("Section Background")
+
+themepickers["Section Border"] = customtheme:ColorPicker{
+    Name = "Section Border",
+    Default = library.theme["Section Border"],
+    Flag = "Section Border",
+    Callback = function(color)
+        library:ChangeThemeOption("Section Border", color)
+    end
+}
+
+library:ConfigIgnore("Section Border")
+
+themepickers["Text"] = customtheme:ColorPicker{
+    Name = "Text",
+    Default = library.theme["Text"],
+    Flag = "Text",
+    Callback = function(color)
+        library:ChangeThemeOption("Text", color)
+    end
+}
+
+library:ConfigIgnore("Text")
+
+themepickers["Disabled Text"] = customtheme:ColorPicker{
+    Name = "Disabled Text",
+    Default = library.theme["Disabled Text"],
+    Flag = "Disabled Text",
+    Callback = function(color)
+        library:ChangeThemeOption("Disabled Text", color)
+    end
+}
+
+library:ConfigIgnore("Disabled Text")
+
+themepickers["Object Background"] = customtheme:ColorPicker{
+    Name = "Object Background",
+    Default = library.theme["Object Background"],
+    Flag = "Object Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Object Background", color)
+    end
+}
+
+library:ConfigIgnore("Object Background")
+
+themepickers["Object Border"] = customtheme:ColorPicker{
+    Name = "Object Border",
+    Default = library.theme["Object Border"],
+    Flag = "Object Border",
+    Callback = function(color)
+        library:ChangeThemeOption("Object Border", color)
+    end
+}
+
+library:ConfigIgnore("Object Border")
+
+themepickers["Dropdown Option Background"] = customtheme:ColorPicker{
+    Name = "Dropdown Option Background",
+    Default = library.theme["Dropdown Option Background"],
+    Flag = "Dropdown Option Background",
+    Callback = function(color)
+        library:ChangeThemeOption("Dropdown Option Background", color)
+    end
+}
+
+
+
+local configsection = configs:Section{Name = "Configs", Side = "Left"}
+
+local configlist = configsection:Dropdown{
+    Name = "Configs",
+    Content = library:GetConfigs(), -- GetConfigs(true) if you want universal configs
+    Flag = "Config Dropdown"
+}
+
+library:ConfigIgnore("Config Dropdown")
+
+local loadconfig = configsection:Button{
+    Name = "Load Config",
+    Callback = function()
+        library:LoadConfig(library.flags["Config Dropdown"]) -- LoadConfig(library.flags["Config Dropdown"], true)  if you want universal configs
+    end
+}
+
+local delconfig = configsection:Button{
+    Name = "Delete Config",
+    Callback = function()
+        library:DeleteConfig(library.flags["Config Dropdown"]) -- DeleteConfig(library.flags["Config Dropdown"], true)  if you want universal configs
+        configlist:Refresh(library:GetConfigs())
+    end
+}
+
+
+local configbox = configsection:Box{
+    Name = "Config Name",
+    Placeholder = "Config Name",
+    Flag = "Config Name"
+}
+
+library:ConfigIgnore("Config Name")
+
+local save = configsection:Button{
+    Name = "Save Config",
+    Callback = function()
+        library:SaveConfig(library.flags["Config Name"]) -- SaveConfig(library.flags["Config Name"], true) if you want universal configs
+        configlist:Refresh(library:GetConfigs())
+    end
+}
+------------------------------------------------------------------------------------------------------------
+
+function IsAlive(player)
+    if CharTable[player] and CharTable[player].head then
+        return true
+    end
+    return false
+end
+
+function IsVisible(player)
+    if IsAlive(player) and CharTable[player] then
+        local HeadPos = CharTable[player].head.Position
+        local Hit = workspace:FindPartOnRayWithIgnoreList(Ray.new(camera.CFrame.p, HeadPos - camera.CFrame.p), {
+            workspace.Ignore,
+            workspace.Players,
+            workspace.Terrain,
+            camera,
+            Players.LocalPlayer.Character,
+            player:FindFirstChild("InCham",true),
+            player:FindFirstChild("OutCham",true)
+        })
+        return Hit == nil
+    end
+    return false
+end
+
+local function Closest()
+    local Max, Close = math.huge
+    for I,V in pairs(Players:GetPlayers()) do
+        if V ~= LocalPlayer and V.Team ~= LocalPlayer.Team and CharTable[V] then
+            local Pos, OnScreen = camera:WorldToScreenPoint(CharTable[V].head.Position)
+            if OnScreen then
+                local Dist = (Vector2.new(Pos.X, Pos.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+                if Dist < Max and (circle.Visible == true and (Dist < circle.Radius)) then
+                    Max = Dist
+                    Close = V
+                end
+            end
+        end
+    end
+    return Close
+end
+
+local function applycylinderadorn(part,outline)
+    local cyladorn = Instance.new("CylinderHandleAdornment",part)
+    cyladorn.Name = "InCham"
+    cyladorn.Color3 = Color3.fromRGB(255, 255, 255)
+    cyladorn.Radius = part.Size.X / 2 + 0.15
+    cyladorn.Height = part.Size.Y + 0.3
+    cyladorn.CFrame = CFrame.new(Vector3.new(), Vector3.new(0,1,0))
+    cyladorn.Adornee = part
+    cyladorn.Transparency = 0.4
+    cyladorn.ZIndex = 2
+    cyladorn.AlwaysOnTop = false
+    cyladorn.Visible = false
+
+	local cyl_adorn
+    if outline then
+       	cyl_adorn = Instance.new("CylinderHandleAdornment",part)
+    	cyl_adorn.Name = "OutCham"
+    	cyl_adorn.Color3 = Color3.fromRGB(255, 0, 0)
+    	cyl_adorn.Radius = part.Size.X / 2 + 0.20
+    	cyl_adorn.Height = part.Size.Y + 0.8
+   	 	cyl_adorn.CFrame = CFrame.new(Vector3.new(), Vector3.new(0,1,0))
+    	cyl_adorn.Adornee = part
+    	cyl_adorn.Transparency = 0
+    	cyl_adorn.ZIndex = 2
+    	cyl_adorn.AlwaysOnTop = false
+    	cyl_adorn.Visible = false
+    end
+
+    cyladorn.Adornee.Changed:Connect(function()
+        if not cyladorn.Adornee or not cyladorn.Adornee.Parent then
+            cyladorn:Destroy()    
+        end
+    end)
+	cyl_adorn.Adornee.Changed:Connect(function()
+        if not cyl_adorn.Adornee or not cyl_adorn.Adornee.Parent then
+            cyl_adorn:Destroy()  
+        end
+    end)
+end
+
+local function applyboxadorn(part,outline)
+    local boxadorn = Instance.new("BoxHandleAdornment",part)
+    boxadorn.Name = "InCham"
+    boxadorn.Color3 = Color3.fromRGB(255, 255, 255)
+    boxadorn.Size = part.Size + Vector3.new(0.1, 0.1, 0.1)
+    boxadorn.Transparency = 0.4
+    boxadorn.Adornee = part
+    boxadorn.ZIndex = 2
+    boxadorn.AlwaysOnTop = false
+    boxadorn.Visible = false
+
+	local cyl_out
+    if outline then
+        cyl_out = Instance.new("BoxHandleAdornment",part)
+        cyl_out.Name = "OutCham"
+        cyl_out.Color3 = Color3.fromRGB(255, 0, 0)
+        cyl_out.Size = part.Size + Vector3.new(0.3, 0.3, 0.3)
+        cyl_out.Transparency = 0
+        cyl_out.Adornee = part
+        cyl_out.ZIndex = 2
+        cyl_out.AlwaysOnTop = false
+        cyl_out.Visible = false
+    end
+
+    boxadorn.Adornee.Changed:Connect(function()
+        if not boxadorn.Adornee or not boxadorn.Adornee.Parent then
+            boxadorn:Destroy()
+        end
+    end)
+	cyl_out.Adornee.Changed:Connect(function()
+        if not cyl_out.Adornee or not cyl_out.Adornee.Parent then
+            cyl_out:Destroy()
+        end
+    end)
+end
+
+function applychams(object)
+    if object:IsA'Model' and object.Name == 'Player' and object.Parent.Name ~= tostring(plr.TeamColor) then
+        local head = object["Head"]
+        local Torso = object["Torso"]
+        local LeftArm = object["Left Arm"]
+        local RightArm = object["Right Arm"]
+        local LeftLeg = object["Left Leg"]
+        local RightLeg = object["Right Leg"]
+
+        applycylinderadorn(head,true)
+        applyboxadorn(Torso,true)
+        applyboxadorn(LeftArm,true)
+        applyboxadorn(RightArm,true)
+        applyboxadorn(LeftLeg,true)
+        applyboxadorn(RightArm,true)
+        applyboxadorn(RightLeg,true)
+    end
+end
+    
+for i,v in pairs(workspace.Players:GetDescendants()) do
+    applychams(v)
+end
+
+workspace.Players.DescendantAdded:Connect(function(add)
+    applychams(add)
+end)
+
+local randomrs 
+randomrs = RunService.RenderStepped:Connect(function()
+    
+    ------------------------------------------ CHAMS SHIT-----------------------------------------------
+    for i,v in pairs(workspace.Players:GetDescendants()) do
+        if v:FindFirstChild("InCham") and v:FindFirstChild("OutCham") then
+            if library.flags["chamst"] then
+                v:FindFirstChild("InCham").Visible = true
+                v:FindFirstChild("InCham").Color3 = library.flags["chamscolor"]
+                v:FindFirstChild("InCham").Transparency = library.flags["Chamstrans"]
+            else
+                v:FindFirstChild("InCham").Visible = false
+            end
+            if library.flags["cham_mode"] == "AlwaysOnTop" then
+                v:FindFirstChild("InCham").AlwaysOnTop = true
+            else
+                v:FindFirstChild("InCham").AlwaysOnTop = false
+            end
+            if library.flags["out_cham"] then
+                v:FindFirstChild("OutCham").Visible = true
+                v:FindFirstChild("OutCham").Color3 = library.flags["Outline color"]
+                v:FindFirstChild("OutCham").Transparency = library.flags["out_trans"]
+            else
+                v:FindFirstChild("OutCham").Visible = false
+            end
+        end
+    end
+	
+	---------------------------------------- ARMS N GUN CHAMS---------------------------------------
+	task.spawn(function()	
+    if library.flags["arm"] then
+		for i,v in pairs(camera:GetChildren()) do -- arm chams (WORKING)
+			if char.alive then 
+				if v:IsA("Model") and v.Name:find("Arm") then
+					for k,b in next, v:GetChildren() do
+						if (b:IsA("MeshPart") or b:IsA("BasePart")) then
+							pcall(function()
+								b.Color = library.flags["arm_color"]
+								b.Material = library.flags["arm_material"]
+								b.Transparency = library.flags["arm_opacity"]
+							end)
+						end
+						if library.flags["arm_texture"] == "Bubbles" then
+							if b:IsA("MeshPart") then
+								b.TextureID = "rbxassetid://" .. 1461576423 -- BUBBLES
+							end
+                        else
+                            if b:IsA("MeshPart") then
+								b.TextureID = "rbxassetid://" .. 5843010904 -- SCANNING
+							end
+						end
+					end
+				end
+			end
+		end
+    end
+
+        if library.flags["weapon"] then -- and not gamelogic.currentgun.isaiming()
+		for i, v in pairs(camera:GetChildren()) do -- GUN CHAMS
+            if (v.Name ~= "Left Arm" or v.Name ~= "Right Arm" ) then
+                if (v:IsA("Model")) then
+                    for i2, v2 in pairs(v:GetChildren()) do
+                            if (v2:IsA("MeshPart")  or v2:IsA("UnionOperation") ) then
+                                v2.Color = library.flags["weapon_color"]
+                                v2.Material = library.flags["weapon_material"]
+                                if v2.Transparency ~= 1 then
+                                    v2.Transparency = library.flags["weapon_opacity"]   
+                                end       
+                            end
+                            if library.flags["weapon_texture"] then
+                                if v2:IsA("MeshPart") then
+                                    v2.TextureID = "rbxassetid://" .. 1461576423 -- BUBBLES
+                                end
+                            else
+                                if v2:IsA("MeshPart") then
+                                    v2.TextureID = "rbxassetid://" .. 5843010904-- SCANNING
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+		end
+	end)
+    -----------------------------------------------------WORLD SHIT ---------------------------------------
+    if library.flags["force_time"] then
+        game.Lighting.TimeOfDay = library.flags["time"]
+    else
+        game.Lighting.TimeOfDay = OldTime
+    end
+    if library.flags["satur_tog"] then
+        cc.Saturation = library.flags["satur_amount"]
+    else
+        cc.Saturation =  OldSaturation
+    end
+    if library.flags["cont_tog"] then
+        cc.Contrast = library.flags["cont_amount"]
+    else
+        cc.Contrast = OldCont
+    end
+    if library.flags["bright_tog"] then
+        cc.Brightness = library.flags["Bright_amount"]
+    else
+        cc.Brightness = OldBright
+    end
+
+    if library.flags["ambient"] then
+        Lighting.Ambient = library.flags["ambient_col"]
+    else
+        Lighting.Ambient = OldAmbient
+    end
+    -- CHARACTER SHIT-------------------------------------------------------------------------------
+    char.jump = function(tbl, jp)
+        if library.flags["jumpboost"] then
+            return oldjump(tbl, library.flags["jump_boost"])
+        end
+        return oldjump(tbl, jp)
+    end
+    if library.flags["walkspeed"] then
+        char:setbasewalkspeed(library.flags.walk_speed)
+    else
+        char:setbasewalkspeed(16)
+    end
+    -- GUN MODS -------------------------------------------------------------------------------------------
+    
+end)
+
+local oldsend = network.send
+network.send = function(self,meth,...)
+    local args = {...}
+
+    if meth == "falldamage" and library.flags["fall_damage"] then
+        return
+    end
+
+    return oldsend(self,meth,unpack(args))
+end
