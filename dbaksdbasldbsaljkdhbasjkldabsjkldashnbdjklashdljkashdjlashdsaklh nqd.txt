@@ -19,7 +19,7 @@ local mathceil = math.ceil
 
 --[Setup Table]
 
-local img_link = "https://imgs.search.brave.com/MV4k_f1Z2kPNYlfwGR3LO_Kac6L3g1ac3xRGU4Hp3O4/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9pbWcx/LmNndHJhZGVyLmNv/bS9pdGVtcy8yNzQz/MjE3L2ExNzMxNDcw/YTAvYW1vbmctdXMt/aW1wb3N0b3ItcGFj/ay0zZC1tb2RlbC1s/b3ctcG9seS1yaWdn/ZWQtZmJ4LW1hLXNw/cC1tZWwtdGJzY2Vu/ZS5qcGc"
+local img_link = "https://i.ibb.co/brqW1ZS/angryimg.png"
 
 writefile("currentImage.jpg", img_link)
 
