@@ -43,7 +43,7 @@ local img_link = "https://i.ibb.co/brqW1ZS/angryimg.png"
 
 writefile("currentImage.jpg", img_link)
 
-local img_tt = https://i.ibb.co/brqW1ZS/angryimg.png
+local img_tt = "https://i.ibb.co/brqW1ZS/angryimg.png"
 
 local esp = {
     players = {},
