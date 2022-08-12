@@ -35,7 +35,7 @@ local esp = {
     font = 2,
     settings = {
         name = {enabled = false, outline = true, displaynames = true, color = Color3fromRGB(255, 255, 255)},
-        box = {enabled = false, outline = true, filled = true, color = Color3fromRGB(255, 255, 255)},
+        box = {enabled = false, outline = true, filled = false, color = Color3fromRGB(255, 255, 255)},
         imagebox = {enabled = false, image = img_tt},
         healthbar = {enabled = false, size = 1, outline = true},
         healthtext = {enabled = false, outline = true, color = Color3fromRGB(255, 255, 255)},
