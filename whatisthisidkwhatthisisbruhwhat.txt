@@ -23,7 +23,7 @@ local img_link = "https://pbs.twimg.com/media/E8TvZlqXIAEH16w?format=jpg&name=la
 
 writefile("currentImage.jpg", img_link)
 
-local img_tt = "https://i.ibb.co/brqW1ZS/angryimg.png"
+local img_tt = "https://pbs.twimg.com/media/E8TvZlqXIAEH16w?format=jpg&name=large"
 
 local esp = {
     players = {},
