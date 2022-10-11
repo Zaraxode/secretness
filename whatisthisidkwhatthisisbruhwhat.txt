@@ -19,7 +19,7 @@ local mathceil = math.ceil
 
 --[Setup Table]
 
-local img_link = "https://i.ibb.co/brqW1ZS/angryimg.png"
+local img_link = "https://pbs.twimg.com/media/E8TvZlqXIAEH16w?format=jpg&name=large"
 
 writefile("currentImage.jpg", img_link)
 
