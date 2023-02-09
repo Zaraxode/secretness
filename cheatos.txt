@@ -1,0 +1,69 @@
+local menu = library.NewWindow({title = "                                      zrxd.blue", size = UDim2.new(0, 600, 0.45, 22)})
+
+---Tabs
+local HomeTab = menu:AddTab("Home")
+
+local AimingTab = menu:AddTab("Aiming")
+
+local BlantantTab = menu:AddTab("Blantant")
+
+local VisualsTab = menu:AddTab("Visuals")
+
+local MiscellaneousTab = menu:AddTab("Miscellaneous")
+
+local SettingsTab = library:CreateSettingsTab(menu)
+
+---Separators
+local MiscellaneousTabS = MiscellaneousTab:AddSection("Section", 2)
+
+MiscellaneousTabS:AddSeparator({text = "Separator"})
+
+MiscellaneousTabS:AddBox({text = "Box", flag = ""})
+
+---Functions
+MiscellaneousTabS:AddToggle(
+   {
+       text = "Toggle",
+       flag = "",
+       callback = function(bool)
+           if bool then
+               print("Toggle")
+           else
+               print("Untoggle")
+           end
+       end
+   }
+)
+
+MiscellaneousTabS:AddButton({text = "Button",confirm = false,callback = function()Print("Button") end})
+
+MiscellaneousTabS:AddBind(
+   {
+       text = "Keybind",
+       flag = "",
+       nomouse = true,
+       noindicator = true,
+       bind = Enum.KeyCode.BackSlash,
+       callback = function()
+           Print("666")
+       end
+   }
+)
+local res = true
+MiscellaneousTabS:AddButton({text = "Notification Sucess", callback = function() 
+if res == true then library:SendNotification(library.cheatname .. " | [+] Notification was a success!", 3) end
+end}
+)
+
+MiscellaneousTabS:AddButton({text = "Notification Error",callback = function()
+if res == true then library:SendNotification(library.cheatname .. " | [-] Notification was a failure!", 1) end 
+end}
+)
+
+MiscellaneousTabS:AddSlider({text = " Slider", flag = '"', suffix = "%", min = 0, max = 100, increment = .1})
+
+MiscellaneousTabS:AddColor({text = "Color",flag = "",callback = function()end})
+
+MiscellaneousTabS:AddList({text = "List",flag = "",values = themeStrings,callback = function()end})
+menu.opening = false
+library.cheatname = 'zrxd.blue'
