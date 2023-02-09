@@ -4576,18 +4576,10 @@ function library:init()
     
     -- Watermark
     do
-        if not IonHub_User then
-            getgenv().IonHub_User = {
-                UID = 0, 
-                User = "admin"
-            }
-        end
         self.watermark = {
             objects = {};
             text = {
-                {self.cheatname, true},
-                {("%s (uid %s)"):format(IonHub_User.User, tostring(IonHub_User.UID)), true},
-                {self.gamename, true},
+                {'zrxd.blue', true},
                 {'0 fps', true},
                 {'0ms', true},
                 {'00:00:00', true},
@@ -4617,7 +4609,7 @@ function library:init()
                     end
                 end
 
-                self.objects.text.Text = table.concat(text,' | ')
+                self.objects.text.Text = table.concat(text,' / ')
                 self.objects.background.Size = newUDim2(0, self.objects.text.TextBounds.X + 10, 0, 17)
 
                 local size = self.objects.background.Object.Size;
