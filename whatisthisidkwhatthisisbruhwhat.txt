@@ -19,11 +19,11 @@ local mathceil = math.ceil
 
 --[Setup Table]
 
-local img_link = "https://i.ibb.co/qsRnMLx/IMG-0919.jpg"
+local img_link = "https://i.ibb.co/dGDRf8j/angryimg.png"
 
 writefile("currentImage.jpg", img_link)
 
-local img_tt = "https://i.ibb.co/qsRnMLx/IMG-0919.jpg"
+local img_tt = "https://i.ibb.co/dGDRf8j/angryimg.png"
 
 local esp = {
     players = {},
