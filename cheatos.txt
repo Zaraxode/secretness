@@ -1,3 +1,6 @@
+local startTick = tick()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Zaraxode/secretness/main/squidthing"))({cheatname = "zrxd.blue", gamename = "Universal"})
+library:init()
 local menu = library.NewWindow({title = "                                      zrxd.blue", size = UDim2.new(0, 600, 0.45, 22)})
 
 ---Tabs
