@@ -1,0 +1,6325 @@
+API Reference
+
+This section contains documentation for every   2021 custom function.
+Environment APIs
+
+Functions
+
+getgenv
+
+table getgenv()
+
+Returns Synapse's global environment table.
+
+getrenv
+
+table getrenv()
+
+Returns the game's global environment table.
+
+oq
+[v'}
+=
+-
+om
+oq
+
+table getreg()
+
+Returns a read-only copy of the Lua registry.
+
+5]
+[v'}
+=
+
+0g
+[o]
+
+table getgc(include_tables?: bool)
+
+Returns a weak table of all Lua objects currently alive according to the garbage collector. By
+default, tables are not included. Note that some values may immediately be collected after this
+is called; as such, there will be many gaps in the table.
+
+filtergc
+
+nil | filtergc( B , options: table, return_one?: bool)
+
+Searches for values currently referenced by Lua that match the given criteria. can either
+be ‘function’ or 'table'. Setting indicates that this function should return the first
+result, or nil if there are no matches. The following options can be used:
+
+Table:
+
+Key Description Default
+If not empty, only include tables with keys ,
+Keys NA nil
+corresponding to all values in this table
+If not empty, only include tables with values .
+Values Py. y Cs nil
+corresponding to all values in this table
+, If not empty, only include tables with keys/value pairs ,
+KeyValuePairs Poy. y Co 4 P nil
+corresponding to all values in this table
+If not empty, only incl les with the m [ .
+Metatable ot empty, only include tables with the metatable nil
+passed
+Function:
+Key Description Default
+Name If not nil, only include functions with this name nil
+If not nil, only include functions with constants that .
+Constants CL nil
+match all values in this table
+If not nil, only include functions with upvalues that match .
+Upvalues Loo nil
+all values in this table
+IgnoreSyn If false, do not ignore Synapse functions. true
+If not nil, only include functions with this function .
+Proto nil
+prototype.
+Environment If not nil, only include functions with this environment. nil
+Hash If not nil, only return functions with this hash. nil
+
+NOTE; values are compared using bit-for-bit equality checks. This means that NaN == NaN
+
+and -0 ~= 0. This allows you to specify NaN or -0 as a value you want to search for.
+
+Examples:
+
+local empty_table = {
+good =
+1
+
+local my_table
+good =
+one =
+three =
+five =
+vl =
+
+}
+
+local my_other_table =
+good = 5
+one =
+three =
+five =
+vl =
+
+}
+
+-- 1dntentionally does not match KeyValuePair, so table should not be found
+local my_bad_table = {
+
+good = 9
+
+one =
+
+three =
+
+vl =
+
+five =
+
+_, V in , filtergc(
+Keys = { 9 1},
+Values = { 1,
+KeyValuePairs = {
+
+five =
+
+}
+}) do
+(v.good)
+warn(v)
+end
+
+local uv = "bbbbb"
+
+local function myfunc()
+return "aaaaa" .. uv
+
+end
+
+print(filtergc('function', {
+IgnoreSyn = false,
+Name = "myfunc"”
+
+}, true)
+
+print(filtergc('function', {
+IgnoreSyn = false,
+Constants = { "aaaaa" }
+}, true)
+
+print(filtergc('function', {
+IgnoreSyn = false,
+Upvalues = { "bbbbb" }
+}, true)
+
+getinstances
+
+table getinstances()
+
+Returns a list of all instances referenced by Lua. Core script references are not included.
+
+getnilinstances
+
+table getnilinstances()
+
+Returns a list of all nil-parented instances referenced by Lua. Core script references are not
+included.
+
+getscripts
+
+table getscripts()
+
+Returns a list of all loaded scripts in the caller's global state.
+
+getloadedmodules
+
+table getloadedmodules()
+
+Returns a list of all loaded [JERE amd:s in the caller's global state.
+fireclickdetector
+
+fireclickdetector (target: Instance)
+
+Emulates clicking a EI OEI21g-
+
+fireproximityprompt
+
+fireproximityprompt (target: Instance)
+
+Emulates triggering a [Jaluka asennad. Equivalent to calling replicatesignal on
+ProximityPrompt.TriggerActionReplicatedflals
+ProximityPrompt.TriggerEndedActionReplicatedf{glelaBlagleie:lol[SREVITo iN
+
+firetouchinterest
+
+firetouchinterest(part: Instance, to_touch: Instance, toggle: bool)
+
+Emulates a event on with CETRe.
+Filesystem APIs
+
+NOTE: All filesystem APIs are sandboxed to the (aaa folder in your Synapse installation.
+Attempting to access files outside of this folder will result in an error.
+
+Functions
+
+readfile
+
+readfile(path: ))
+
+Reads a file from the workspace folder.
+
+readfileasync
+
+readfileasync(path: ) [yields]
+
+Reads a file from the workspace folder asynchronously.
+
+writefile
+writefile(path: , contents: )
+
+Writes to a file in the workspace folder.
+
+writefileasync
+
+writefileasync(path: , contents: )} [yields]
+
+Writes to a file in the workspace folder asynchronously.
+
+appendfile
+
+appendfile (path: , contents:
+
+Appends to a file in the workspace folder.
+
+appendfileasync
+void appendfileasync(path: string, contents: string) [yields]
+
+Appends to a file in the workspace folder asynchronously.
+
+loadfile
+
+(function?, string?) loadfile(path: string, contents: string)
+
+Equivalent to (EE BAGIT- ACCEL LRLCICER DD)
+
+loadfileasync
+
+(function?, string?) loadfileasync(path: string, contents: string) [yields]
+
+SNE ClsiRde) 1 0ads tring (readfileasync (path) )}
+
+listfiles
+
+table listfiles(folder?: string)
+
+Returns an array of file names belonging to (FCs
+
+isfile
+
+bool 1isfile(path: string)
+
+Returns true if refers to a file.
+
+isfolder
+
+bool 1isfolder(path: string)
+
+Returns true if refers to a folder.
+
+makefolder
+bool makefolder (path: string)
+
+Recursively creates directories. Returns true on success.
+delfolder
+
+delfolder (path:
+
+Deletes a folder.
+
+delfile
+
+delfile(path:
+
+Deletes a file.
+
+getsynasset
+
+getsynasset (path:
+
+Returns a string that can be used with GUI elements, sounds, meshes, and etc. to refer
+to an asset in the workspace folder.
+
+Note: Certain assets only work with certain file types. For example, (RR ages only work with
+.webm encoded videos.
+
+saveinstance
+
+bool saveinstance(instance: Instance | table, options?: table) [yields]
+
+Saves an instance in binary (.rbxl or .rbxm) format. The following options can be passed:
+
+Option Description Default
+FileName Output file Varies
+IgnoreArchivable Ignores the property false
+SavePlayerCharacters Includes player characters (.rbxl only) false
+
+Incl P j nd their ndan
+SavePlayers cludes [ENE objects and their descendants false
+(.rbx! only)
+DisableCompression Disables compression in the binary output false
+Starts a batch decompiler job for all relevant
+Decompile . . false
+scripts and includes the results
+Includes already decompiled code in the output.
+Decompilejobless . y P . P false
+No new scripts are decompiled.
+
+Option
+
+Description
+
+Default
+
+Includes non-serializable instances as
+
+SaveNonCreatable objects false
+Nillnstances Includes nil instances (.rbxl only) false
+CopyToClipboard If true, copies the result to clipboard instead of false
+writing to disk
+. A list of instances (and their descendants) to
+IgnorelList {
+
+ignore
+
+If the option is enabled, returns true when the job completes
+successfully or false if cancelled by the user.
+
+saveplace
+
+bool saveplace(options?: table) [yields]
+
+Equivalent to SETI CLE AR)
+
+Classes
+
+e DirectoryWatcher
+
+Hooking APIs
+
+Functions
+
+setstackhidden
+
+void setstackhidden(closure: function, hidden?: bool = True)
+
+Hides or unhides a function from the callstack.
+
+void setstackhidden(level: int, hidden?: bool = True)
+
+Hides or unhides a function (indicated by {S}aR) in the callstack.
+
+newcclosure
+
+function newcclosure(closure: function, name?: string)
+
+Creates a C wrapper around with function name [Eli if provided.
+
+clonefunction
+
+function clonefunction(to_clone: function)
+
+Clones a function. Note that if the function passed is a C closure, (EULER Will
+return on the returned closure.
+
+hookfunction
+
+function hookfunction(to_hook: function, hook: function, filter?: Filter = nil)
+
+Hooks a Lua or C function in-place. Returns a copy of the original function. Can optionally
+specify a filter to use.
+
+hookproto
+
+void hookproto(to_hook: ProtoProxy, hook: function)
+
+Hooks a Lua function prototype. Prototypes can only be hooked once!
+hookmetamethod
+
+hookmetamethod (to_hook: userdata, metamethod: , hook: function
+
+TODO
+
+restorefunction
+
+restorefunction(to_restore: closure)
+
+Un-hooks a function hooked with hookfunction.
+
+isfunctionhooked
+
+bool isfunctionhooked(f: function
+
+Returns true if § is hooked by hookmetamethodsllsyn. oth. hook]
+
+restoreproto
+
+restoreproto(to_restore: ProtoProxy)
+
+TODO
+
+hooksignal
+
+hooksignal (signal: ScriptSignal, callback: function
+
+Enables the interception of signal invocations. When (FRR is fired, is called for every
+Lua connection in with an info table and the invocation arguments. Returning true from
+this callback fires the original connection. For now, the callback should not yield.
+cannot be used to intercept C (engine) connections or Lua connections belonging to
+CoreScripts.
+
+Example code:
+local part = Instance.new("Part")
+part.Changed: Connect (function(prop)
+print(prop .. " changed?)
+end)
+hooksignal(part.Changed, function(info, prop)
+print(info.Connection) -- the connection object.
+print(info.Function) —-- the original function. Not available for waiting
+
+connections.
+print(info.Index) —-- the position of this connection in part.Changed at the
+time this callback is executed. Not available for waiting connections.
+print(prop)
+return true, "Hooked"
+end)
+part.Name = "NewName"
+
+Output:
+
+Connection
+function: <etc>
+[]
+
+Name
+
+Hooked changed?
+
+restoresignal
+
+void restoresignal(signal: ScriptSignal)
+
+Unhooks a signal hooked with hooksignal.
+
+issignalhooked
+
+void 1issignalhooked(signal: ScriptSignal)
+
+Returns true if is hooked.
+
+syn.oth.hook
+
+function syn.oth.hook(target: function, hook: function)
+
+A secure version of [Eginaaatay for C functions that works by running hook code on separate
+threads. When a hooked function is called, a new or cached hook thread is resumed with the
+FN and any passed arguments. The returned callback can be used to execute the original
+function on the original, calling thread.
+In the context of a hook thread, the following functions behave as though being called under
+the original thread:
+
+e getnamecallmethod
+
+e setnamecallmethod
+
+e checkcaller
+
+e checkcallstack
+
+e getcallingscript
+
+¢ the debug library (debug.*)
+e TODO
+
+syn.oth.unhook
+
+bool syn.oth.unhook(target:
+
+Un-hooks a function hooked with (YI. The second parameter is not required if the
+function has only been hooked once. Returns true upon success.
+
+syn.oth.get_root_callback
+
+Returns a function that can be used to call the original function in the context of a hook thread.
+Useful for when a function is hooked multiple times and the callback you receive from
+executes the next hook in the chain, not the original function.
+
+syn.oth.is_hook_thread
+
+bool syn.oth.is_hook_thread()
+
+Returns true if this thread is a hook thread.
+
+syn.oth.get_original_thread
+
+thread syn.oth.get_original_thread()
+
+Return the original thread this hook comes from, or nil if the current thread is not a hook.
+Filter APIs
+
+Functions
+
+getfilter
+
+Classes
+
+eo FilterBase
+
+e NotFilter
+
+e AnyFilter
+
+e AllFilter
+
+e TypeFilter
+
+e NamecallFilter
+
+¢ InstanceTypefFilter
+
+e [nstanceNamefFilter
+e ArgumentFilter
+
+e UserdataTypefFilter
+e ArgCountFilter
+
+o CallerFilter
+Input APIs
+
+Functions
+
+iswindowactive
+
+bool -+iswindowactive()
+
+Returns true if the game window is in focus.
+
+lockwindow
+
+lockwindow()
+
+Focuses and locks the game window. While locked, focus changes and input by the user are not
+seen by the game. Input can still be sent with the input API.
+
+unlockwindow
+
+unlockwindow()
+
+Unlocks the game window.
+
+iswindowlocked
+
+bool 1iswindowlocked()
+
+Returns true if the game window is locked.
+
+keypress
+
+keypress (key: KeyCode)
+
+Simulates a key press for the specified KeyCode.
+
+keypress (key:
+
+Simulates a key press for the specified virtual key-code.
+keyrelease
+
+void keyrelease(key: KeyCode)
+
+Simulates a key press for the specified KeyCode.
+
+void keyrelease(key: number)
+
+Simulates a key release for the specified virtual key-code.
+
+keyclick
+
+void keyclick(key: KeyCode)
+
+Simulates an instant key press + release for the specified KeyCode.
+
+mouselpress
+void mouselpress(x: number, y: number)
+Simulates a left mouse button press at the specified coordinates.
+
+void mouselpress()
+
+Simulates a left mouse button press at the current mouse position.
+
+mouseirelease
+
+void mouselrelease(x: number, y: number)
+
+Simulates a left mouse button release at the specified coordinates.
+
+void mouselrelease()
+
+Simulates a left mouse button release at the current mouse position.
+
+mouse1iclick
+
+void mouselclick()
+Simulates a left mouse click at the current mouse position.
+
+mousez2press
+void mouse2press(x: number, y: number)
+Simulates a right mouse button press at the specified coordinates.
+
+void mouse2press()
+
+Simulates a right mouse button press at the current mouse position.
+
+mouse2release
+
+void mouse2release(x: number, y: number)
+
+Simulates a right mouse button release at the specified coordinates.
+
+void mouse2release()
+
+Simulates a right mouse button release at the current mouse position.
+
+mouse2click
+
+void mouse2click()
+
+Simulates a right mouse click at the current mouse position.
+
+mousescroll
+
+void mousescroll(forward: bool, x: number, y: number)
+
+Simulates a scroll forward or backward at the specified coordinates.
+
+void mousescroll (forward: bool)
+
+Simulates a scroll forward or backward at the current mouse position.
+
+mousemoverel
+void mousemoverel(x: number, y: number, -internal?: bool)
+
+Moves the mouse relative to its current position. If provided, specifies whether a
+mouse movement event is signalled internally or your physical mouse cursor is moved. If not
+provided, is implied to be true if the game window is locked OR not active and false if
+
+otherwise. A physical mouse movement cannot occur when the game window is not in focus.
+
+mousemoveabs
+
+void mousemoveabs(x: number, y: number, internal?: bool)
+
+Moves the mouse to the specified coordinates. If provided, specifies whether a
+
+mouse movement event is signalled internally or your physical mouse cursor is moved. If not
+provided, is implied to be true if the game window is locked OR not active and false if
+otherwise. A physical mouse movement cannot occur when the game window is not in focus.
+
+iskeydown
+
+bool 1iskeydown(key: number)
+
+Returns true if the specified virtual-key code is pressed and the game window is in focus and
+not locked.
+
+iskeytoggled
+
+bool 1iskeytoggled(key: number)
+
+Returns true if the specified virtual-key code is toggled (e.g. caps lock) and the game window is
+in focus and not locked.
+
+getmousestate
+
+bool getmousestate()
+
+Returns true if the internal Ul cursor is enabled.
+
+setmousestate
+
+void setmousestate(new_state: bool)
+Enables or disables the internal Ul cursor.
+Miscellaneous APIs
+
+Functions
+
+setclipboard
+
+bool setclipboard(data: | Instance | table)
+
+Copies a string or Instance or table of Instances to the clipboard. Returns true on success.
+
+setfflag
+
+bool setfflag(fflag: , value:
+
+Sets FFlag to (EXIM. Returns false if the flag doesn't exist or couldn't be set.
+
+identifyexecutor
+
+) 1identifyexecutor()
+
+Returns " " and version string.
+
+unlockmodulescript
+
+unlockmodulescript( ¢ ModuleScript)
+
+"Unlocks" such that code running at different contexts (e.g. level 2 vs level 7) return the
+same values when required.
+
+require
+
+: ModuleScript)
+
+This function replaces the game's to allow for requiring game modules from higher
+contexts of script execution, like the one in which Synapse scripts run.
+
+messagebox
+int messagebox(text: string, caption?: string, type?: int) [yields]
+
+A wrapper around Microsoft's MessageBoxA.
+
+setwindowtitle
+
+void setwindowtitle(text: string)
+
+Sets the title of the game window. A wrapper around Microsoft's SetWindowTextA.
+
+setwindowicon
+
+void setwindowicon(data: string?)
+
+Sets the icon of the game window.
+
+0g
+o
+(md
+Ss
+=
+
+Instance gethui()
+
+Returns a protected container where GUIs can be hidden from detection by the game.
+
+createuitab
+
+void createuitab(title: string, contents: string, icon?: string)
+
+Creates a tab in the external Ul
+
+newtable
+table newtable(narray: number, nhash: number)
+
+Creates a table with the specified array and hash sizes, then fills with random data. Random
+data for hash part has random vector keys with X, Y, and Z values between 0 and 1 and
+as a value. Random data for array part has as a value. This function is useful for creating
+tables with memory hidden to scripts. If you would like this feature, make sure is >=33
+and [iERlY is >= 17. NOTE: To prevent table reallocation from exposing this memory, make sure
+you don't have fewer array/hash values!
+
+cloneref
+Instance cloneref (instance: Instance)
+
+Clones a reference to an Instance. The Lua expression will be false, but
+both values will point to the same Instance.
+
+syn.queue_on_teleport
+
+void syn.queue_on_teleport(script: string)
+
+Queues to be executed after the next teleport.
+
+syn.clear_teleport_queue
+
+void syn.clear_teleport_queue()
+
+Removes all queued scripts from the teleport queue.
+
+syn.get_thread_ identity
+
+int syn.get_thread_identity()
+
+Returns the current thread's context level.
+
+syn.set_thread_identity
+
+void syn.set_thread_identity(identity: int)
+
+Sets the current thread's context level.
+
+syn.protect_gui
+
+void syn.protect_gui(target: Instance)
+
+is deprecated. For backwards compatability, this function will cause to be
+parented the return value of (34IRR®) the next time it is parented.
+
+syn.unprotect_gui
+
+void syn.unprotect_gui (target: Instance)
+is deprecated. For backwards compatability, this function will disable the
+parent-redirection done by [gaan ug-
+
+syn.trampoline_call
+
+(bool, ...any| ) syn.trampoline_call(target:
+
+Proxy a call to a Lua function with the given call stack and thread options. is an
+array of tables, with each sub-table having fields described below.
+
+The parameter allows you to preset the (Tale: and { fields with the values
+from that thread. This field is optional, and those fields can be overridden after the fact.
+
+Note: These values do not need to correlate with actual information returned by debug.getinfo;
+they are fully customizable.
+
+Note: The parameter will override all other data you pass here aside from
+
+Call Stack Entry Description
+
+currentline The currently executing line of code.
+
+env The function's environment.
+
+source The 'source’ field returned by [IER Salat
+name The function's name.
+
+numparams The number of parameters in the function.
+is_vararg Whether this function takes variadic arguments.
+func A function to copy all information from.
+
+Thread Option Entry Description
+
+script The script attached to the thread.
+
+identity The identity of the new state.
+
+env The global environment of the new thread.
+thread A thread used as the parent.
+
+syn.toast_notification
+
+syn.toast_notification(options: table)
+
+Displays a toast notification in the internal Ul. The options table follows the following format:
+
+Option Description Default
+
+Option Description Default
+Type ToastType enum Required
+Duration How long the notification should last, in seconds 5
+Title The notification's title Required
+Content The notification's content Required
+IconColor Overrides the icon color Varies by FS
+
+syn.ipc_send
+
+syn.ipc_send(data: )
+
+Sends data to the Ul.
+
+Classes
+
+e Value
+
+Enums
+
+e ToastType
+Network APIs
+
+Functions
+
+isnetworkowner
+
+bool 1isnetworkowner (part: BasePart)
+
+Returns true if your client is a network owner of Elge-
+Reflection APIs
+
+Functions
+
+setscriptable
+
+bool setscriptable(instance: Instance, property_name: , scriptable: bool)
+
+Sets a property's JIRIaEL flag. Non-scriptable properties cannot be accessed from Lua.
+Returns the flag's original state. NOTE: Take care using this function as changes done also
+affect game scripts, introducing the possibility of creating detection vectors or breaking existing
+
+code.
+
+gethiddenproperty
+
+gethiddenproperty (instance: Instance, property_name:
+
+Safely reads a non-scriptable property value, including those of type and
+SharedString}
+
+sethiddenproperty
+
+sethiddenproperty (instance: Instance, property name:
+
+Safely sets a non-scriptable property value.
+
+getproperties
+
+table getproperties(instance: Instance)
+
+Returns a dictionary of all property values, including any non-scriptable, for (Ens
+
+gethiddenproperties
+
+table gethiddenproperties(instance: Instance)
+
+Returns a dictionary of all non-scriptable property values for (fi snas-
+
+getpcdprop
+( 5 ) getpcdprop(instance: TriangleMeshPart)
+
+Returns a GERACE S HOFRLEIC I R-0E E: property.
+
+getcallbackmember
+
+getcallbackmember (instance: Instance, property: s return_raw?: bool =
+
+False)
+
+Returns the value of a callback property, such as [Eilts HEIRS GINE. NOTE;
+Arbitrary values can be passed here. See the documentation for ESSN RINT lastly fOr
+
+more information about this and what does.
+
+geteventmember
+
+ScriptSignal geteventmember (instance: Instance, event_name:
+
+Creates an unrestricted signal object for any event in {fea Useful for connecting to
+conventionally non-scriptable signals.
+
+getrendersteppedlist
+
+table getrendersteppedlist()
+
+Returns all callbacks bound with Ua ETCH Rl LCI Cg =e
+Script APIs
+
+Functions
+
+loadstring
+
+Equivalent to Lua 5.1's loadstring. This function may access the thread's global environment
+(ERIE) to resolve/cache imports and builtins.
+
+checkcaller
+
+bool checkcaller()
+
+Returns true if the current thread is owned by Synapse.
+
+checkcallstack
+
+bool checkcallstack( 8 , Level?: int = 2)
+
+Returns true if the current thread is owned by Synapse AND all functions at or above in
+the call stack are Synapse functions. A level of fl represents the function calling checkcallstack, 8
+represents the function calling the function calling checkcallstack, and so forth.
+
+issynapsefunction
+
+bool 1issynapsefunction(f:
+
+Returns true if §j is a Synapse function.
+
+islclosure
+
+bool 1islclosure(f:
+
+Returns true if fj is a Lua function (as opposed to a C function).
+
+decompile
+decompile(target: variant<
+
+Decompiles asynchronously. cannot be a Synapse function. The following
+options can be used: | Option | Description | Default | | |
+
+| | | VerboseFunctions | Adds a comment to functions
+with their name and optionally other info | true | | FunctionLine | Adds the line that a function
+is defined | true | | FunctionUpvalues | Lists the upvalues of functions | true | |
+FunctionConstants | Lists the constants that functions use | false | | RenamelLoopVariables |
+Gives for loop variables more specific names if possible | true | | VariableRenaming | Gives
+some variables contextual names | true | | ExtraRenaming | Renames extra variables | true |
+| NullableNaming | Allows variable renaming to ignore nil assignments | true | |
+PrimitiveRenaming | Renames variables with trivial primitive types | true | | Semicolons |
+Adds semicolons to the end of each statement | true | | TableNewlines | Adds a newline after
+each table entry | true | | UselfElseExpression | Allows the use of if-else expression | false | |
+CallLineinfo | Adds a comment next to function calls of their line | false | | LazyFlattening | Try
+to less aggressively condense expressions | true | | FlattenGuardStatements | Turns guard
+statements into single lines | true | | MaxCustomNamelLength | Max length for variable
+names | 32 | | MaxTabs | Max number of tabs | 20 | | MaxRationalDenominator | Max
+denominator for rationalization | 1000 |
+
+getscriptthread
+
+thread getscriptthread(script: Instance)
+
+Returns the main Lua thread associated with gla. Note that this may not be the only thread
+used!
+
+getsenv
+
+table getsenv(script: Instance)
+
+Returns the Lua environment (such as that returned by EE aaaay) associated with the main
+function of (mle. Essentially equivalent to getfenv(getscriptfunction(script)).
+
+WARNING: Scripts may add a metatable to this value and check who's accessing it! If you want
+to get around this, check for whether the environment has a metatable and use
+
+syn. trampoline_callEld<elgsllal=4\Y8
+
+getscriptfunction
+function getscriptfunction(script: Instance)
+
+Returns the main function associated with (lala.
+
+getscripthash
+
+string getscripthash(script: LuaSourceContainer)
+
+Returns a script's bytecode hash.
+
+getfunctionhash
+
+string getfunctionhash(script: function)
+
+Returns a Lua function's bytecode hash.
+
+getscriptname
+
+string getscriptname(script: Instance)
+
+Returns the name of a script when it was first loaded.
+
+dumpbytecode
+
+string dumpbytecode(target: variant<function, LuaSourceContainer>)
+
+Dumps a function or script to the Luau bytecode format. cannot be a Synapse function.
+
+getcallingscript
+
+variant<Instance, nil> getcallingscript()
+
+Returns the script associated with the current thread or nil.
+
+issynapsethread
+
+bool 1issynapsethread(thread: thread)
+
+Returns true if is owned by Synapse.
+setsynapsethread
+
+setsynapsethread(set_to_synapse: bool, target_thread?: thread = nil)
+
+Changes whether (or the current thread if Eg IRanEE is nil) can pass
+through IEEE. | this is not the case, Synapse-specific overrides like EELIRaae1d OF
+
+[NaS WEAR Will not work.
+Signal APIs
+
+Functions
+
+getconnections
+
+table getconnections(signal: ScriptSignal, context?: integer)
+
+Returns a script signal's connections. NOTE: Some events, such as (gists 's
+IEEE, actually consist of different signals internally for different security contexts. By
+default, returns the connections of all signals.
+
+firesignal
+
+firesignal(signal: ScriptSignal, ...any)
+
+Fires a signal's Lua connections (excluding CoreScript connections). Roughly equivalent to
+
+for i, v in pairs(getconnections(signal)) do local f = v.Function if f then
+
+task.spawn(f, ...) end end
+
+cfiresignal
+
+cfiresignal(signal: ScriptSignal, ...any)
+
+Fires a signal, including all engine (C) and CoreScript connections. This function cannot be
+
+called on "pseudo" signals such as those returned by (dT IRM GM ENCE REGEN. Passed
+values must be of the correct type.
+
+replicatesignal
+
+replicatesignal(signal: ScriptSignal, ...any)
+
+Fires a signal on the server. Signal must be replicable.
+
+cansignalreplicate
+
+bool cansignalreplicate(signal: ScriptSignal)
+
+Returns true if a signal can be replicated to the server (see replicatesignal).
+getsignalarguments
+
+table getsignalarguments(signal: ScriptSdignal)
+
+Returns a table of a signal's arguments’ types. For example, passing I Elle dg A CIa-Ct
+(WGIGRESlgal{ "Instance", "Instance "}}
+
+isconnectionenabled
+
+bool 1disconnectionenabled (connection: ScriptConnection)
+
+Returns true if a connection is enabled.
+
+setconnectionenabled
+
+void setconnectionenabled (connection: ScriptConnection, enable: bool)
+
+Enables or disables a connection. Disabled connections remain connected, but do nothing
+when fired.
+
+isluaconnection
+
+bool 1isluaconnection(connection: ScriptConnection)
+
+Returns true if Ia Salgs represents a Lua connection.
+
+iswaitingconnection
+
+bool 1iswaitingconnection(connection: ScriptConnection)
+
+Returns true if Enna aalgs is the result of a (IEEEA®) call.
+
+getconnectionfunction
+
+any getconnectionfunction(connection: ScriptConnection, return_raw?: bool =
+
+False)
+
+Returns a connection's associated function. The connection must be a non-waiting Lua
+connection.
+NOTE; Arbitrary values can be passed to f¥3unaee. In order to prevent accidental mishaps, this
+function will, by default, filter out any connected value that is not a function or a table with a
+metamethod. If was passed table with a metamethod, the returned
+
+value will be the value of that metamethod, or nil if that value is not a function.
+
+The optional second parameter will disable this behavior, and will just return whatever was
+passed to .Connect.
+
+getconnectionthread
+
+thread getconnectionthread(connection: ScriptConnection)
+
+Returns a connection’s associated thread. The connection must be a Lua connection.
+
+isgamescriptconnection
+
+bool isgamescriptconnection(connection: ScriptConnection)
+
+Returns true if represents a Lua connection created by game scripts (as opposed to
+core scripts).
+Table APIs
+
+Functions
+
+getrawmetatable
+
+table | nil getrawmetatable(object: any)
+
+Returns an object's metatable, ignoring the metamethod.
+
+setrawmetatable
+
+void setrawmetatable(object: any, target: table)
+
+Sets an object's metatable, ignoring the metamethod.
+
+setreadonly
+
+void setreadonly(table: table, value: bool)
+
+Sets a table's read-only flag.
+
+setuntouched
+
+void setuntouched(target: function | thread | table, value: bool)
+
+Sets a Lua environment's untouched flag. This flag is relevant to certain Luau optimizations,
+namely built-ins. If true, "built-in" globals such as or are fetched from a cache and
+cannot be modified. If false, the cache is disabled and built-ins are fetched from the
+environment table as normal. Functions and set this flag to false implicitly.
+
+Example:
+
+local env = getfenv() —— untouched implicity set to false
+local old_print = print
+env.print = function() old_print("overwritten!") end
+
+print("hello")
+setuntouched(env, true)
+print("hello")
+
+Output:
+overwritten!
+
+hello
+
+isuntouched
+
+bool 1isuntouched(target: function
+
+Returns a table's untouched flag. If passed a function/thread, returns the untouched flag of
+their environments.
+
+makewritable
+
+makewritable(table: table)
+
+Zo NVEITsilde)set readonly (table, false))
+
+makereadonly
+
+makereadonly (table: table)
+
+Se I\EIEhIR(e dsc t readonly (table, true)}
+
+isreadonly
+
+bool 1disreadonly(table: table)
+
+Returns a table's read-only flag.
+Websocket APIs
+
+Classes
+
+eo WebsocketClient
+Legacy Drawing API
+
+Note: and objects have been deprecated in favor of DrawEntryDynamic
+and our new Drawing API.
+
+Functions
+
+Drawing.new
+
+Drawing.new(type_name: )
+
+Instantiates a new DrawEntry object. Equivalent to [RT a1e®) Valid type names include:
+
+e "Line"
+
+eo "Text"
+
+e "Image"
+e "Circle"
+e "Square"
+e "Triangle"
+e "Quad"
+
+Classes
+
+e DrawEntry
+e Line
+
+e Text
+
+e Image
+
+e Circle
+
+e Square
+
+e Triangle
+
+e Quad
+Drawing API
+
+Namespaces
+
+e Drawinglmmediate
+
+Functions
+
+setcliprect
+
+setcliprect(z_index: int, rect?: Rect)
+
+Defines or undefines the draw area (clip rectangle) for the given z-index.
+
+setcliprect(z_index: int, top_left: Point, bottom_right: Point)
+
+Defines the draw area (clip rectangle) for the given z-index.
+
+setfpscap
+
+setfpscap(cap: float)
+
+Sets the FPS unlocker cap. The user has to enable the FPS unlocker themselves for this API to
+work. Note: Minimum FPS is 1, maximum FPS is 16384.
+
+getfpscap
+
+getfpscap(cap: float)
+
+Returns the current FPS unlocker cap.
+
+getfpsmax
+
+getfpsmax (cap: float)
+
+Returns currently active monitor's display rate, in hertz. Returns 0 on failure.
+
+Classes
+e DrawFont
+
+e Point
+
+e Point2D
+
+e Point3D
+
+e Pointinstance
+
+e PointMouse
+
+e PointOffset
+
+e DrawEntryDynamic
+e LineDynamic
+
+e PolyLineDynamic
+e TextDynamic
+
+e CircleDynamic
+
+e RectDynamicBase
+e RectDynamic
+
+e GradientRectDynamic
+e ImageDynamic
+
+e ImageRef
+
+Enums
+
+e XAlignment
+
+e YAlignment
+
+e CFrameRotationType
+e Drawing.Fonts
+Console APIs
+
+Functions
+
+rconsoletop
+
+rconsoletop (should_be_top: bool)
+
+Enables or disables the internal console window being topmost.
+
+rconsoleprint
+
+rconsoleprint (data:
+
+Writes text to the internal console. If is true, the function does not block (useful when
+
+printing large amounts of text). If is false, null terminators will not be escaped. Defaults
+to true.
+
+rconsoleinfo
+
+rconsoleinfo(data: 7: bool)
+
+Writes info text to the internal console. If EEE is true, the function does not block (useful
+when printing large amounts of text).
+
+rconsolewarn
+rconsolewarn(data: 5 7: bool)
+
+Writes warning text to the internal console. If EEN is true, the function does not block (useful
+when printing large amounts of text).
+
+rconsoleerr
+rconsoleerr (data: 5 ?: bool)
+
+Writes error text to the internal console. If is true, the function does not block (useful
+when printing large amounts of text).
+rconsoleclear
+
+void rconsoleclear()
+
+Clears the internal console.
+
+rconsolename
+
+void rconsolename()
+
+Sets the title of the internal console's window.
+
+rconsoleinput
+
+string rconsoleinput() [yields]
+
+Waits for a line of user input from the internal console and returns the result. Truncated to
+4096 characters.
+
+Keep in mind that if a different thread tries to do other console-related functions while this one
+is running, the game will stop responding until you give the console an input.
+
+rconsolehide
+
+void rconsolehide()
+
+Hides the console.
+
+rconsoleshow
+
+void rconsoleshow()
+
+Makes the console visible if it wasn't already.
+
+rconsoletoggle
+
+void rconsoletoggle()
+
+Toggles whether the console is hidden or not.
+
+rconsolehidden
+bool rconsolehidden()
+
+Returns whether or not the console is currently hidden.
+
+printconsole
+
+printconsole(data: , rt int, g: int, b: int) [parallel_safe]
+
+Prints colored text to the Synapse console.
+
+printconsole(data: )} [parallel_safe]
+
+Prints text to the Synapse console.
+
+printconsole(data: , color: Color3) [parallel_safe]
+
+Prints colored text to the Synapse console.
+
+clearconsole
+
+clearconsole()
+
+Clears the internal and external consoles.
+HTTP APIs
+
+Functions
+
+syn.request
+
+table syn.request(params: table) [yields]
+
+Makes a RESTful HTTP request.
+
+Request Options
+
+Option Description Default
+Url The request URL Required
+Method The request method "GET"
+Headers A map of header names to header values {
+Cookies A map of cookie names to cookie values {
+The request body. Cannot be used with GET or HEAD
+Body requests. It might be necessary to specify the nil
+header when sending JSON or other formats.
+
+Synapse Headers
+
+In addition to headers provided by the user,   adds the following:
+
+Note: SiEmlras latte and SURES st Cnakalcly have been deprecated in favor of the new
+
+public key verification system shown below.
+
+Can
+
+Header Value Override
+User-Agent A string in the format "sx/<build_hash>". Yes
+Syn- Public-key authenticated headers, base64-encoded. No
+Signature See below for use.
+Syn- A string value which uniquely identifies the computer No
+Fingerprint running  .
+Syn-User- A string value which uniquely identifies the current No
+Identifier   user.
+
+Response Table
+
+returns the following table once the request is complete:
+
+Key Description
+Success Whether the request succeeded
+StatusCode The HTTP status code of the response
+StatusMessage A human-readable version of
+Headers The response headers
+Cookies The response cookies
+Body The response body
+
+Public Key Verification
+
+Servers can verify a request was made by   via the public key verification system,
+along with to verify extra data sent to the server.
+
+To verify a header, you must use libsodium with the crypto_sign_open function.
+
+Pass CELI CETL [Rca 4d (om CIES aye le:T] Jed: AE (Base64 encoded) as the public key. We
+
+will always alert developers and users if this key ever changes.
+
+After signature verification succeeds, you will get a JSON encoded payload with the following
+fields:
+
+Field Description
+
+TR UNIX timestamp when the user authenticated this instance
+authenticationTime
+
+(UTC).
+fingerprint Same as the legacy header.
+
+The IP address that was used to authenticate this instance.
+ipAddress Please note this can change if the user was using a mobile
+
+network/similar. Can be IPv4 or IPv6.
+
+userldentifier Same as the legacy header.
+
+The Base64 encoded public key for this user. You can use this
+to verify messages that were signed with the
+
+userPublicKey function. To verify messages, use the
+libsodium crypto_sign_verify_detached function with this key
+
+as the public key.
+
+The Base64 encoded prompt public key for this user. Like the
+userPromptPublicKey above public key, this can be used to verify messages that
+
+were signed with the [BYIR=EeY SRE gM IZA R=) function.
+
+Please note that new fields can be added to this JSON payload at any time, so don't rely on the
+above for your JSON schemas. We will never remove fields without first alerting developers,
+
+though.
+
+todo: add NodeJS, PHP, ASP.NET example code and probably move this whole section (Public
+Key Verification) to a page in the Developer Guide
+Math APIs
+
+Functions
+
+getboundingbox
+
+(CFrame, Vector3) getboundingbox(parts: table, orientation?: CFrame)
+
+Calculates the bounding box of a list of parts and returns its position (as a CFrame, optionally
+transformed by (TRlIaeralgy and size.
+
+worldtoscreen
+
+table worldtoscreen(points: table, offset?: Vectors)
+
+Performs world to screen calculations on every or in and returns the
+result as a table with matching keys. can be provided to offset every position.
+Regex Classes
+
+Classes
+
+e Match
+e Regex
+Timer APIs
+
+Classes
+
+e Duration
+e Stopwatch
+e Timer
+Parallel APIs
+
+Functions
+
+getactors
+
+table getactors()
+
+Returns a list of "active" Actor instances (any connected to a Lua state).
+
+getactorstates
+
+table getactorstates()
+
+Returns a list of LuaStateProxy objects representing all Lua states created by the engine for use
+by Actors.
+
+getluastate
+
+LuaStateProxy getluastate(actor_or_script?: Instance)
+
+Returns a LuaStateProxy for the given Actor or loaded script. If not provided, the current
+LuaStateProxy is returned.
+
+getgamestate
+
+LuaStateProxy getgamestate()
+
+Returns a LuaStateProxy for the default game state.
+
+checkparallel
+
+bool checkparallel()
+
+Returns whether this code is executing in parallel.
+
+syn.run_on_actor
+
+bool syn.run_on_actor (actor: Instance, source:
+
+Schedules code to be executed on an actor's Lua state.
+
+Classes
+
+e LuaStateProxy
+
+Events
+
+syn.on_actor_state_created(actor: Instance)
+
+Fired upon actor Lua state creation, before any scripts are ran.
+Namespace Index
+
+syn
+
+o syn.crypt
+
+syn.crypt.base64
+syn.crypt.hex
+syn.crypt.lz4
+syn.crypt.zstd
+syn.crypt.derive
+syn.crypt.user
+
+= syn.crypt.user.prompt
+syn.crypt.seal
+syn.crypt.sign
+
+= syn.crypt.sign.detached
+syn.crypt.custom
+syn.crypt.url
+
+o syn.oth
+
+bit
+debug
+Drawing
+
+Drawinglmmediate
+Bit Library
+
+All library functions take 32-bit unsigned integers and return a signed 32-bit result. Take
+note of this when implementing. If you want unsigned results, we suggest using the
+library.
+
+Functions
+
+oO
+Q
+
+Q
+Q
+
+int bit.badd(...uint)
+
+Adds 2 or more integers.
+
+oo
+[72
+c
+oT
+
+int bit.bsub(...uint)
+
+Subtracts 2 or more integers (from left to right).
+
+o
+3
+=
+
+int bit.bmul(...uint)
+
+Multiplies 2 or more integers.
+
+-3
+=
+<
+
+int bit.bdiv(...uint)
+
+Divides 2 or more integers (from left to right).
+
+oo
+Q
+=
+Qo.
+
+int bit.band(...uint)
+
+Performs bitwise AND on 2 or more integers.
+
+bor
+int bit.bor(...uint)
+
+Performs bitwise OR on 2 or more integers.
+
+bxor
+
+int bit.bxor(...uint)
+
+Performs bitwise XOR on 2 or more integers.
+
+bnot
+
+int bit.bnot(...uint)
+
+Performs bitwise NOT on an integer.
+
+Ishift
+
+int bit.lshift(value: uint, n: uint)
+
+Shifts left by [§ bits.
+
+rshift
+int bit.rshift(value: uint, n: uint)
+
+Shifts right by § bits.
+
+arshift
+int bit.arshift(value: uint, n: uint)
+
+Performs an arthimetic shift right on by @ bits.
+
+rol
+int bit.rol(value: uint, n: uint)
+
+Rotates left § bits.
+ror
+
+int bit.ror(value: uint, n: uint)
+
+Rotates right § bits.
+
+bpopcount
+
+int bit.bpopcount(value: uint)
+
+Returns the number of set bits in (EIR.
+
+bswap
+
+int bit.bswap(value: uint)
+
+Inverts (EYIIE's endianness.
+
+tohex
+
+int bit.tohex(value: uint, nibbles?: int
+
+Converts {Ef to a hex string.
+
+tobit
+
+int bit.tobit(value: uint)
+
+Converts into proper form for bitwise operations.
+Synapse Library
+
+Namespaces
+
+¢ Synapse Cryptography Library
+¢ syn.oth
+
+Functions
+
+queue_on_teleport
+
+syn.queue_on_teleport(script: )
+
+Queues to be executed after the next teleport.
+
+clear_teleport_queue
+syn.clear_teleport_queue()
+
+Removes all queued scripts from the teleport queue.
+
+get_thread_ identity
+int syn.get_thread_-identity()
+
+Returns the current thread's context level.
+
+set_thread_identity
+
+syn.set_thread_identity(identity: -int)
+
+Sets the current thread's context level.
+
+protect_gui
+syn.protect_gui (target: Instance)
+
+is deprecated. For backwards compatability, this function will cause to be
+parented the return value of (3aIIRR®) the next time it is parented.
+unprotect_gui
+
+syn.unprotect_gui (target: Instance)
+
+is deprecated. For backwards compatability, this function will disable the
+parent-redirection done by fg aus
+
+trampoline_call
+
+(bool, ...any| ) syn.trampoline_call(target:
+
+Proxy a call to a Lua function with the given call stack and thread options. is an
+array of tables, with each sub-table having fields described below.
+
+The parameter allows you to preset the (FIgRlEe and i) fields with the values
+from that thread. This field is optional, and those fields can be overridden after the fact.
+
+Note: These values do not need to correlate with actual information returned by debug.getinfo;
+they are fully customizable.
+
+Note: The parameter will override all other data you pass here aside from
+
+Call Stack Entry Description
+
+currentline The currently executing line of code.
+
+env The function's environment.
+
+source The ‘source’ field returned by [lNER AGL)
+name The function's name.
+
+numparams The number of parameters in the function.
+is_vararg Whether this function takes variadic arguments.
+func A function to copy all information from.
+
+Thread Option Entry Description
+
+script The script attached to the thread.
+
+identity The identity of the new state.
+
+env The global environment of the new thread.
+thread A thread used as the parent.
+
+toast_notification
+syn.toast_notification(options: table)
+
+Displays a toast notification in the internal Ul. The options table follows the following format:
+
+Option Description Default
+Type ToastType enum Required
+Duration How long the notification should last, in seconds 5
+Title The notification's title Required
+Content The notification's content Required
+IconColor Overrides the icon color Varies by
+ipc_send
+
+syn.ipc_send(data: )
+
+Sends data to the Ul.
+
+run_on_actor
+
+bool syn.run_on_actor (actor: Instance, source:
+
+Schedules code to be executed on an actor's Lua state.
+
+request
+
+table syn.request(params: table) [yields]
+
+Makes a RESTful HTTP request.
+
+Request Options
+Option Description Default
+Url The request URL Required
+Method The request method "GET"
+Headers A map of header names to header values {
+Cookies A map of cookie names to cookie values {
+
+header when sending JSON or other formats.
+
+Option Description Default
+The request body. Cannot be used with GET or HEAD
+Body requests. It might be necessary to specify the nil
+
+Synapse Headers
+
+In addition to headers provided by the user,   adds the following:
+
+Note: QhiEmlr-Ge alse and SRE Cnakalcls have been deprecated in favor of the new
+
+public key verification system shown below.
+
+Can
+
+Header Value Override
+User-Agent A string in the format "sx/<build_hash>". Yes
+Syn- Public-key authenticated headers, base64-encoded. No
+Signature See below for use.
+Syn- A string value which uniquely identifies the computer No
+Fingerprint running  .
+Syn-User- A string value which uniquely identifies the current No
+Identifier   user.
+
+Response Table
+
+returns the following table once the request is complete:
+
+Key Description
+Success Whether the request succeeded
+StatusCode The HTTP status code of the response
+StatusMessage A human-readable version of
+Headers The response headers
+Cookies The response cookies
+Body The response body
+
+Public Key Verification
+
+Servers can verify a request was made by   via the public key verification system,
+along with to verify extra data sent to the server.
+
+To verify a header, you must use libsodium with the crypto_sign_open function.
+
+Pass (Hara GIR: cra 4 i LRN VI: lewd IA (Base64 encoded) as the public key. We
+
+will always alert developers and users if this key ever changes.
+
+After signature verification succeeds, you will get a JSON encoded payload with the following
+fields:
+
+Field Description
+
+TE UNIX timestamp when the user authenticated this instance
+authenticationTime
+
+(UTC).
+fingerprint Same as the legacy header.
+
+The IP address that was used to authenticate this instance.
+ipAddress Please note this can change if the user was using a mobile
+
+network/similar. Can be IPv4 or IPv6.
+
+userldentifier Same as the BRIE Hashal1d legacy header.
+
+The Base64 encoded public key for this user. You can use this
+to verify messages that were signed with the
+
+userPublickey function. To verify messages, use the
+libsodium crypto_sign_verify_detached function with this key
+as the public key.
+
+The Base64 encoded prompt public key for this user. Like the
+userPromptPublicKey above public key, this can be used to verify messages that
+
+were signed with the [SY IRAa AFUE ALLEY function.
+
+Please note that new fields can be added to this JSON payload at any time, so don't rely on the
+above for your JSON schemas. We will never remove fields without first alerting developers,
+though.
+
+todo: add NodeJS, PHP, ASP.NET example code and probably move this whole section (Public
+Key Verification) to a page in the Developer Guide
+
+Events
+
+on_actor_state_created
+
+syn.on_actor_state_created(actor: Instance)
+
+Fired upon actor Lua state creation, before any scripts are ran.
+Synapse Cryptography Library
+
+Namespaces
+
+e syn.crypt.base64
+e syn.crypt.hex
+
+e syn.crypt.lz4
+
+e syn.crypt.zstd
+
+e syn.crypt.derive
+e syn.crypt.user
+
+e syn.crypt.seal
+
+e syn.crypt.sign
+
+* syn.crypt.custom
+e syn.crypt.url
+
+Functions
+
+encrypt
+
+syn.crypt.encrypt(data: 3 , additional_data?:
+
+Encrypts with [8 and includes ERE ERRTIEAMCERT i it is passed.
+
+(Uses libsodium secretbox for when GLEEASEREYMGELE) isn't passed, and the AEAD form of the
+same algorithm if it is passed. Nonce is generated and appended before the encrypted
+message.)
+
+decrypt
+
+syn.crypt.decrypt(ciphertext: B , additional_data?:
+
+)
+
+Decrypts with [@. The data (along with if it is passed) is also
+authenticated via a MAC before being returned.
+
+(Uses libsodium secretbox or the AEAD form if EEL RSE IEIMeERS is passed, like above.)
+
+hash
+
+syn.crypt.hash(data: , key?: )
+Hashes EE}a with Blake2B. Optionally, you can pass [8 to create a 'keyed' hash, for which the
+hash will never be the same for different keys.
+
+(Uses libsodium generic hashing.)
+
+hmac
+syn.crypt.hmac(data: , key: )
+
+Creates a HMAC signature from and (8. Note this is not the same as passing a [§§) to the
+above function, and uses a different algorithm.
+
+(Uses libsodium authentication.)
+
+random
+
+syn.crypt.random(len: uint)
+
+Generates a random string with (cannot be negative or exceed 1024).
+syn.crypt.base64
+
+Functions
+encode
+
+Base64 encodes (Jie.
+decode
+
+syn.crypt.base64.decode (input: )
+
+Base64 decodes (FE.
+syn.crypt.hex
+
+Functions
+
+encode
+
+syn.crypt.hex.encode (input: )
+
+Encodes in hexadecimal.
+
+decode
+
+syn.crypt.hex.decode (input: )
+
+Decodes {Jif in hexadecimal.
+syn.crypt.lz4
+
+Functions
+
+compress
+
+syn.crypt.lz4.compress (data: )
+
+Compresses with LZ4.
+syn.crypt.derive
+
+Functions
+
+key
+
+syn.crypt.derive.key(len: uint, key: , sub_key_1id: uint, context:
+
+)
+
+Derives a cryptographic key from another {#8 specified - 8 specifies the length of the
+generated key, is the index of the key to generate, and is a 8-byte string
+that uniquely identifies the script that is generating this key.
+
+The string can be any 8 ASCII characters. Some examples are and
+script}
+
+Note: Due to Lua's usage of 64 bit floating point numbers, the maximum safe integer to pass to
+is 2752, Passing a larger number will result in undefined behavior.
+
+(Uses libsodium key derivation.)
+
+syn.crypt.derive.key(len: uint, key:
+
+Alternatively, you can derive a cryptographic key from [889 with [fj length from a simple ID
+passed into {8. This can be a message of any length.
+
+(Uses libsodium generic hashing, with the being used for a keyed hash.)
+
+password
+
+syn.crypt.derive.password(len: uint, password:
+
+PasswordDerivationMode) [yields]
+
+Derives a cryptographic key from a user-entered [Errnagy Due to passwords usually being
+low-complexity and easy to crack, this function uses a password hashing function to achieve its
+goals.
+
+In order to use this function, you must pass a 16-byte SJE. You can generate this via
+
+syn.crypt.randomf
+Password hashing functions are deliberately slow - this is to make bruteforce attacks harder.
+
+The (FB (or parameter allows you to specify how much security you want
+your derived key to have. You should choose the mode you wish to use based on how
+
+acceptable the wait for function completion is for your application, and what the security
+requirements for your application are.
+
+Warning: Using the higher security PasswordDerivationMode options (or a parameter
+higher then 512MiB) with more then one password hash being processed at once can cause
+crashes due to high-memory requirements for the hash function.
+
+(Uses libsodium password hashing.)
+
+PasswordDerivationMode
+
+Mode Note
+- The password hash takes ~100 milliseconds to complete on a modern
+PC.
+The password hash takes ~1 second to complete on a modern PC.
+— The password hash takes ~5 seconds to complete on a modern PC,
+
+Please note the warning above, as it particularly affects this.
+
+syn.crypt.derive.password(len: uint, password:
+
+ops_Llimit: uint, mem_limit: uint) [yields]
+
+syn.crypt.user
+
+Namespaces
+
+e crypto.user.prompt
+
+Functions
+
+encrypt
+
+syn.crypt.user.encrypt(data: , mode: UserEncryptionMode, key?:
+
+)
+
+Encrypts in a way that only the caller's   account can decrypt it. You can also pass
+a [&) to add a secondary key to the encryption if you wish.
+
+Note: If the user resets their   password, the output of this function will not be
+decryptable anymore. The user simply changing their password when they know their current
+one will not cause this to happen, however.
+
+The [FEB parameter controls how the encryption works.
+
+UserEncryptionMode
+Mode Note
+Ties the encrypted data to the users   account. The data is
+decryptable on other machines if the pre-conditions stated above
+are met.
+
+Ties the encrypted data to both the users   account and
+Windows account. The data is only decryptable if both the pre-
+
+conditions stated above are met and the user does not reset their
+Windows password.
+
+Ties the encrypted data to both the users   account and
+Windows machine. The data is only decryptable if both the pre-
+
+conditions stated above are met and the user does not reset their
+Windows PC.
+
+decrypt
+
+syn.crypt.user.decrypt(ciphertext:
+
+Decrypts from the Per-User Encrypt function above. You do not need to pass the
+
+you used to encrypt this data, but you need to pass the {& you used to
+encrypt the data if one was specified. The function will error if decryption fails.
+
+sign
+
+syn.crypt.user.sign(data:
+
+Signs in a way that only the caller's   account can produce this signature.
+
+Equivalent to GY a Ia lu: Cite Ce Be gcei=s With a user-unique key.
+
+You can verify data was signed with this method from a web request. See the HTTP APIs for
+more information.
+
+verify
+
+bool syn.crypt.user.verify(data: , signature:
+
+Verifies was signed by the BY As AIT TIa ar function from the caller's  
+account. If you want to verify data signed by another user, get their public key from the HTTP
+APIs.
+crypto.user.prompt
+
+All Per-User APIs also have a prompting equivalent under the table.
+These functions make a verification box asking the user to authenticate the request made by
+the script, and only return the data if the user accepts. This is more useful for more "high
+security’ data that you dont want cryptographic operations performed on by an unauthorized
+script.
+
+All of these functions yield as well, with the exclusion of which
+does not need to be authenticated by the user.
+
+Functions
+
+encrypt
+
+syn.crypt.user.prompt.encrypt(data: , mode: UserEncryptionMode,
+
+key?: ) [yields]
+
+Prompt equivalent to syn.crypt.user.encrypt.
+
+decrypt
+
+syn.crypt.user.prompt.decrypt(ciphertext: 2: ) [yields]
+
+Prompt equivalent to syn.crypt.user.decrypt
+
+sign
+
+syn.crypt.user.prompt.sign(data: ) [yields]
+
+Prompt equivalent to syn.crypt.user.sign.
+
+verify
+
+bool syn.crypt.user.prompt.verify(data: , signature:
+
+Prompt equivalent to syn.crypt.user.verify.
+syn.crypt.seal
+
+Functions
+
+keygen
+
+) syn.crypt.seal.keygen()
+
+Generates a new public & secret keypair, and returns it in that order.
+
+derive
+
+) syn.crypt.seal.derive(key:
+
+syn.crypt.seal.encrypt(plaintext: ,» public_key:
+
+Encrypts with the (TIRE. The data can only be later decrypted via the secret key in
+the keypair.
+
+decrypt
+
+syn.crypt.seal.decrypt(ciphertext: , public_key: , secret_key:
+
+)
+
+Decrypts (REY ub lic_keyEllsecret_key
+syn.crypt.sign
+Namespaces
+
+e syn.crypt.sign.detached
+
+Functions
+
+keygen
+
+( 5 ) syn.crypt.sign.keygen()
+
+Generates a new public & secret keypair, and returns it in that order.
+
+NOTE; These keypairs are NOT compatible with the ones used for the encryption library above.
+
+derive
+
+) syn.crypt.sign.derive(key:
+
+syn.crypt.sign.create(data: , secret_key: )
+
+Creates a signature for {Ejay with the TT aaaGy, and returns the signature combined with the
+message.
+
+open
+
+syn.crypt.sign.open(data: , public_key:
+
+Verifies the passed in with the (IT RIS, and returns the original message if the
+verification succeeds. Errors if verification fails.
+syn.crypt.sign.detached
+
+Functions
+
+Create
+
+syn.crypt.sign.detached.create (data: , secret_key:
+
+Creates a signature for (Egg with the Saga aey. and returns the signature.
+
+verify
+
+bool syn.crypt.sign.detached.verify(data: , signature: , public_key:
+
+)
+
+Verifies the passed in with the I RI and and returns if the
+verification succeeds. Returns if verification fails.
+syn.crypt.custom
+
+Functions
+
+encrypt
+
+syn.crypt.custom.encrypt(cipher:
+
+)
+
+Encrypts with [8 using selected and IND.
+decrypt
+
+syn.crypt.custom.decrypt(cipher:
+
+)
+
+Decrypts with (8) using selected and TID.
+hash
+
+syn.crypt.custom.hash(cipher:
+
+Hashes with akan
+
+Custom Hashing Algorithms
+
+MD5 SHA1 SHA2 SHA3 BLAKE
+md>5 shai sha224 sha3-224 blake2b
+sha256 sha3-256 blake2s
+sha384 sha3-384
+sha512 sha3-512
+
+hmac
+
+syn.crypt.custom.hmac (cipher:
+
+Creates a HMAC signature from and [8 with Fak:
+
+Custom HMAC Algorithms
+
+MD5 SHA1 SHA2 SHA3
+
+md5 sha sha256 sha3-224
+sha384 sha3-256
+sha512 sha3-384
+
+sha3-512
+
+syn.crypt.url
+
+Functions
+
+encode
+
+syn.crypt.url.encode(data: ))
+
+decode
+
+syn.crypt.url.decode(data: )
+
+syn.oth
+
+Functions
+
+hook
+
+A secure version of (EEIeaaaatgy for C functions that works by running hook code on separate
+threads. When a hooked function is called, a new or cached hook thread is resumed with the
+and any passed arguments. The returned callback can be used to execute the original
+function on the original, calling thread.
+
+In the context of a hook thread, the following functions behave as though being called under
+the original thread:
+
+e getnamecallmethod
+
+e setnamecallmethod
+
+e checkcaller
+
+o checkcallstack
+
+eo getcallingscript
+
+e the debug library (debug.*)
+e TODO
+
+unhook
+
+bool syn.oth.unhook(target:
+
+Un-hooks a function hooked with EYEE. The second parameter is not required if the
+function has only been hooked once. Returns true upon success.
+
+get_root_callback
+
+Returns a function that can be used to call the original function in the context of a hook thread.
+Useful for when a function is hooked multiple times and the callback you receive from
+executes the next hook in the chain, not the original function.
+
+is_ hook thread
+bool syn.oth.is_hook_thread()
+
+Returns true if this thread is a hook thread.
+
+get_original_thread
+
+thread syn.oth.get_original_thread()
+
+Return the original thread this hook comes from, or nil if the current thread is not a hook.
+Debug Library
+
+Functions
+
+validlevel
+
+bool debug.validlevel(level: int, t?: thread)
+
+Checks if (I is a valid index level for the current thread or @§ if passed.
+
+getcallstack
+
+table debug.getcallstack(t?: thread)
+
+Returns a table with each index having fields for the being executed at that call stack level,
+and the if it is a Lua closure. Uses @ instead of the callers thread if one is passed.
+
+getprotos
+
+table debug.getprotos(f: function
+
+Returns a table containing the inner prototypes of function §§ Use (TER tae aaagy with
+set to to get a list of closures.
+
+getproto
+
+table | ProtoProxy debug.getproto(f: function
+
+Gets the inner function of §j at (FEES
+
+Note: If (IRRREITE is true, it instead will return a table of functions. These are the closures of
+that proto that exist within the GC.
+
+getstack
+debug.getstack(level: int, +index?: -int)
+
+Gets the method stack at level (JE. If (RLY is not provided, a table is returned.
+setstack
+
+void debug.setstack(level: int, index: int, value: any)
+
+Sets a stack value at (ffl for function at [£e]valuch
+
+getupvalues
+
+table debug.getupvalues(fi: function | -int)
+
+Retrieve the upvalues in function fi or at level {§.
+
+getupvalue
+
+any debug.getupvalue(fi: function | int, index: int)
+
+Returns the upvalue with index li in function or level {@
+
+setupvalue
+
+void debug.setupvalue(fi: function | int, index: dint, value: any)
+
+Sets an upvalue at index {EH in function or level {§.
+
+getconstants
+
+table debug.getconstants(f: function | int | ProtoProxy, pseudo_indices?: bool =
+False)
+
+Retrieve the constants in function fg or at level i.
+
+getconstant
+
+any debug.getconstant(f: function | int | ProtoProxy, index: int)
+
+Returns the constant at index gi in function (gf or level
+
+setconstant
+debug.setconstant(f: function
+
+Set constant fi to tuple at level or function ff).
+
+getmetatable
+
+table debug.getmetatable(t: table)
+
+Equivalent to getrawmetatable.
+
+setmetatable
+
+debug.setmetatable(t: table, mt: table)
+
+Equivalent to setrawmetatable.
+
+getregistry
+
+table debug.getregistry()
+
+Equivalent to getreg.
+Drawing
+
+Functions
+
+new
+
+Drawing.new(type_name: )
+
+Instantiates a new DrawEntry object. Equivalent to [I Te). Valid type names include:
+
+e "Line"
+
+eo "Text"
+
+e "Image"
+e "Circle"
+e "Square"
+e "Triangle"
+e "Quad"
+
+Enums
+
+e Fonts
+Drawinglmmediate
+
+NOTE: Drawinglmmediate APIs can only be called during render steps. See
+Drawinglmmediate.GetPaint for more information.
+
+Functions
+
+Line
+
+void DrawingImmediate.Line(pl: Vector2, p2: Vector2, color: Color3, opacity:
+
+number, thickness: number)
+
+Draws a line.
+
+Circle
+
+void DrawingImmediate.Circle(center: Vector2, radius: number, color: Color3,
+opacity: number, num_sides: int, thickness: number)
+
+Draws a circle.
+
+FilledCircle
+
+void DrawingImmediate.FilledCircle(center: Vector2, radius: number, color:
+Color3, num_sides: int, opacity: number)
+
+Draws a filled circle.
+
+Triangle
+
+void DrawingImmediate.Triangle(pl: Vector2, p2: Vector2, p3: Vector3, color:
+Color3, opacity: number, thickness: number)
+
+Draws a triangle.
+
+FilledTriangle
+
+void DrawingImmediate.FilledTriangle(pl: Vector2, p2: Vector2, p3: Vector3,
+
+color: Color3, opacity: number)
+
+Draws a filled triangle.
+Rectangle
+
+void DrawingImmediate.Rectangle(top_left: Vector2, size: Vector2, color: Color3,
+
+opacity: number, rounding: number, thickness: number)
+
+Draws a rectangle.
+
+FilledRectangle
+
+void DrawingImmediate.FilledRectangle(top_left: Vector2, size: Vector2, color:
+Color3, opacity: number, rounding: number)
+
+Draws a filled rectangle.
+
+Quad
+
+void DrawingImmediate.Quad(pl: Vector2, p2: Vector2, p3: Vector2, p4: Vector2,
+color: Color3, opacity: number, thickness: number)
+
+Draws a quad.
+
+FilledQuad
+
+void DrawingImmediate.FilledQuad(pl: Vector2, p2: Vector2, p3: Vector2, p4:
+Vector2, color: Color3, opacity: number)
+
+Draws a filled quad.
+
+Text
+
+void DrawingImmediate.Text(position: Vector2, font: DrawFont, font_size: number,
+color: Color3, opacity: number, text: string, center: bool)
+
+Draws text.
+
+OutlinedText
+
+void DrawingImmediate.OutlinedText(position: Vector2, font: DrawFont, font_size:
+
+number, color: Color3, opacity: number, outline_color: Color3, outline_opacity:
+number, text: string, center: bool)
+
+Draws outlined text.
+GetPaint
+
+SynSignal DrawingImmediate.GetPaint(z_index: int)
+
+Returns an event that is fired every render step for a specific z-index. Lower value
+events will fire before higher value events. APIs can only be called under
+these events.
+Class Index
+
+e SynSignal
+e SynGlobalSignal
+e SynConnection
+e ProtoProxy
+e ReadonlyTableProxy
+¢ WebsocketClient
+e RenderObject
+o RenderButton
+RenderColorButton
+RenderCheckBox
+RenderColorPicker
+RenderCombo
+RenderTextBox
+RenderSeparator
+RenderLabel
+RenderSlider
+RenderintSlider
+RenderDrag
+RenderintDrag
+RenderSelectable
+RenderChildBase
+ms RenderTabMenu
+m= RenderChildWindow
+m RenderSameline
+=m RenderPopup
+m= RenderFont
+= RenderDummyWindow
+= RenderCollapsable
+m= Renderindent
+= RenderWindow
+e Duration
+e Stopwatch
+e Timer
+e LuaStateProxy
+e DirectoryWatcher
+e Match
+e Regex
+e DrawFont
+e Drawing
+
+oO 0 Oo OO 000 0 0 0 o
+e DrawEntry
+
+e Point
+
+[o]
+[o]
+[o]
+[o]
+
+[+]
+
+Line
+Text
+Image
+Circle
+Square
+Triangle
+Quad
+
+Point2D
+Point3D
+Pointinstance
+PointMouse
+PointOffset
+
+e DrawEntryDynamic
+
+o
+
+Oo 0 OO ©
+
+LineDynamic
+PolyLineDynamic
+TextDynamic
+CircleDynamic
+RectDynamicBase
+
+= RectDynamic
+
+= GradientRectDynamic
+
+= ImageDynamic
+
+e ImageRef
+e FilterBase
+
+[+]
+
+cc 0 0 0 0 0 0 0 O°
+
+[o}
+
+NotFilter
+
+AnyFilter
+
+AllFilter
+
+TypeFilter
+NamecallFilter
+InstanceTypeFilter
+InstanceNamefFilter
+ArgumentFilter
+UserdataTypeFilter
+ArgCountFilter
+CallerFilter
+
+e Value
+Class: DrawFont
+
+Static Methods
+
+DrawFont DrawFont.RegisterDefault(font_name: , options: table) [yields]
+
+DrawFont DrawFont.Register(font_data: , options: table) [yields]
+
+table DrawFont.ListDefault()
+
+Returns a list of the default registered fonts.
+
+Methods
+
+Vector2 DrawFont:GetTextBounds(size: float, text:
+
+Calculates the bounds a string of text occupies given a font size.
+Class: Drawing
+
+Methods
+
+Drawing:WaitForRenderer() [yields]
+
+Yields until the game renderer is fully initialized. Returns immediately if the renderer is already
+enabled.
+Class: DrawEntry
+
+Properties
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+
+A V2-era misnomer and now alias for 'Opacity'. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set 0s via a (aaa. Write-only.
+
+Methods
+
+void DrawEntry:Remove()
+
+Disables a DrawEntry.
+
+void DrawEntry:Destroy()
+
+An alias for (EINE.
+DrawEntry:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+DrawEntry:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Line
+
+Static Methods
+
+Line Line.new()
+
+Properties
+
+float Thickness
+
+Determines the thickness of a Line in pixels.
+
+Vector2 From
+
+Determines the starting position of a Line.
+
+Vector2 To
+Determines the end position of a Line.
+
+Inherited from DrawEntry:
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+
+A V2-era misnomer and now alias for 'Opacity’'. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set via a [529E. Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+Disables a DrawEntry.
+
+Line :Remove()
+
+Line:Destroy()
+
+An alias for (aE.
+
+Line:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Line:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Text
+
+Static Methods
+
+Text Text.new()
+
+Properties
+
+string Text
+
+Determines the text to be displayed.
+
+Vector2 TextBounds [readonly]
+
+Determines the Vector2 space occupied by a Text object.
+
+number Size
+Determines the font size of a Text object.
+Drawing.Fonts Font
+Determines the font of a Text object.
+
+bool Centered
+
+Determines whether the displayed text is centered.
+
+bool Outlined
+
+Determines whether the displayed text is outlined.
+
+Color3 OutlineColor
+
+Determines the outline color of the displayed text.
+
+Vector2 Position
+
+Determines the position of a Text object.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+A V2-era misnomer and now alias for 'Opacity'. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set via a [I529E. Write-only.
+
+Methods
+
+Inherited from
+
+Text :Remove()
+
+Disables a DrawEntry.
+
+Text:Destroy()
+
+An alias for (a.
+
+Text:MoveToFront()
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Text:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Image
+
+Static Methods
+
+Image Image.new()
+
+Properties
+
+Data
+
+Determines the raw image data for an Image.
+
+Vector2 ImageSize [readonly]
+
+Determines the dimensions of the image held by the Data property.
+
+Vector2 Size
+
+Determines the size of an Image.
+
+Vector2 Position
+
+Determines the position of an Image.
+
+number Rounding
+
+Determines the roundness of an Image.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+A V2-era misnomer and now alias for ‘Opacity’. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set 0s via a (aaa. Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+Image :Remove()
+
+Disables a DrawEntry.
+
+Image:Destroy()
+
+An alias for (aE.
+
+Image:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Image:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Circle
+
+Static Methods
+
+Circle Circle.new()
+
+Properties
+
+number Thickness
+
+Determines the thickness of a Circle.
+
+int NumSides
+
+Determines the number of segments that make up a Circle.
+
+number Radius
+
+Determines the radius of a Circle.
+
+bool Filled
+
+Determines whether a Circle is filled.
+
+Vector2 Position
+
+Determines the position of a Circle.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+A V2-era misnomer and now alias for ‘Opacity’. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set 03 via a (aaa. Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+Circle:Remove()
+
+Disables a DrawEntry.
+
+Circle:Destroy()
+
+An alias for (aE.
+
+Circle:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Circle:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Square
+
+Static Methods
+
+Square Square.new()
+
+Properties
+
+number Thickness
+
+Determines the thickness of a Square.
+
+Vector2 Size
+
+Determines the size of a Square.
+
+Vector2 Position
+Determines the position of a Square.
+
+bool Filled
+
+Determines whether a Square is filled.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+
+A V2-era misnomer and now alias for 'Opacity'. Deprecated.
+
+float Opacity
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set via a ([529E). Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+Square :Remove()
+
+Disables a DrawEntry.
+
+Square:Destroy()
+
+An alias for (aE.
+
+Square :MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Square :MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Triangle
+
+Static Methods
+
+Triangle Triangle.new()
+
+Properties
+
+number Thickness
+
+Determines a Triangle's thickness.
+
+Vector2 PointA
+
+The position of a Triangle's first point.
+
+Vector2 PointB
+The position of a Triangle's second point.
+
+Vector2 PointC
+
+The position of a Triangle's third point.
+
+bool Filled
+
+Determines whether a Triangle is filled.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+A V2-era misnomer and now alias for ‘Opacity’. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set 03 via a (aaa. Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+Triangle:Remove()
+
+Disables a DrawEntry.
+
+Triangle:Destroy()
+
+An alias for (aE.
+
+Triangle:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+Triangle:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Quad
+
+Static Methods
+
+Quad Quad.new()
+
+Properties
+
+number Thickness
+
+Determines a Quad's thickness.
+
+Vector2 PointA
+
+The position of a Quad's first point.
+
+Vector2 PointB
+
+The position of a Quad's second point.
+
+Vector2 PointC
+
+The position of a Quad's third point.
+
+Vector2 PointD
+
+The position of a Quad's fourth point.
+
+bool Filled
+
+Determines whether a Quad is filled.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntry will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntry is rendered relative to other GUIs.
+
+float Transparency
+
+A V2-era misnomer and now alias for 'Opacity'. Deprecated.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntry, where 0 is fully transparent
+and 1 is fully opaque.
+
+Color3 Color
+Determines the color of a DrawEntry.
+
+Vector3 ColorVec3 [writeonly]
+
+Used to set 03 via a (aaa. Write-only.
+
+Methods
+
+Inherited from DrawEntry:
+
+void Quad:Remove()
+
+Disables a DrawEntry.
+
+void Quad:Destroy()
+
+An alias for (I.
+
+void Quad:MoveToFront()
+
+Moves a DrawEntry to the front of the current ZIndex's draw list.
+
+void Quad:MoveToBack()
+
+Moves a DrawEntry to the back of the current ZIndex's draw list.
+Class: Point
+
+Properties
+
+Vector2 ScreenPos [readonly]
+A Point's screen position.
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+
+bool HasColorOverride
+
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+
+Color3 ColorOverride
+
+Overrides a Point's color when [EHS Ia NC iS true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+
+Sets using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: Point2D
+
+A point in two-dimensional space.
+
+Static Methods
+
+Point2D Point2D.new()
+Point2D Point2D.new(point: UDim2)
+
+Point2D Point2D.new(point: Vector2)
+
+Point2D Point2D.new(x: number, y: number)
+
+Point2D Point2D.new(x_scale: number, x_offset: number, y_scale: number, y_offset:
+
+number)
+
+Properties
+
+UDim2 Point
+
+A Point2D's position.
+
+Vector2 PointVec2
+
+Allows you to get/set directly as [[¥399&. Returns only the offset fields of Ii§LP)
+Inherited from Point:
+
+Vector2 ScreenPos [readonly]
+
+A Point's screen position.
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+bool HasColorOverride
+
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+
+Color3 ColorOverride
+
+Overrides a Point's color when EEN Caml iS true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+
+Sets ((ARIEIEIIALE Using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: Point3D
+
+A point in three-dimensional space.
+
+Static Methods
+
+Point3D Point3D.new()
+
+Point3D Point3D.new(point: Vector3)
+
+Point3D Point3D.new(x: number, y: number, z: number)
+
+Properties
+
+Vector3 Point
+
+A Point3D's position.
+Inherited from Point:
+
+Vector2 ScreenPos [readonly]
+
+A Point's screen position.
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+
+bool HasColorOverride
+
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+
+Color3 ColorOverride
+
+Overrides a Point's color when JES «Akg NC aalE is true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+Sets ((ARIEIEIIGLE Using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: Pointinstance
+
+A dynamic point whose position is linked to an instance's 'CFrame’ property.
+
+Static Methods
+
+PointInstance PointInstance.new(instance?: Instance, offset?: CFrame)
+
+Properties
+
+Instance Instance
+
+Determines the instance a Pointinstance will track.
+
+CFrame Offset
+
+Describes the offset from a Pointinstance's instance.
+
+CFrameRotationType RotationType
+
+Describes how the rotation of affects the (IARIRE. Defaults to (EEECIaRe-
+
+Vector3 WorldPos [readonly]
+
+Describes a Pointlnstance's world position. Read only.
+Inherited from Point:
+
+Vector2 ScreenPos [readonly]
+
+A Point's screen position,
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+
+bool HasColorOverride
+
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+Color3 ColorOverride
+
+Overrides a Point's color when ERA Ig Caml E is true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+
+Sets using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: PointMouse
+
+A dynamic point whose position is linked to the user's mouse.
+
+Properties
+
+Inherited from Point:
+
+Vector2 ScreenPos [readonly]
+
+A Point's screen position.
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+
+bool HasColorOverride
+
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+
+Color3 ColorOverride
+
+Overrides a Point's color when [EEA IgN Caml: iS true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+
+Sets using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: PointOffset
+
+A dynamic point whose position is offset from another [Xlae-
+
+Static Methods
+
+PointOffset PointOffset.new()
+
+PointOffset PointOffset.new(point: Point)
+
+PointOffset PointOffset.new(point: Point, offset: Vector2)
+
+PointOffset PointOffset.new(point: Point, x_offset: number, y_offset: number)
+
+Properties
+
+Point Point
+
+Holds a reference to a [las
+
+Vector2 Offset
+
+Describes an offset to the [Jklae-
+
+Inherited from Point:
+
+Vector2 ScreenPos [readonly]
+A Point's screen position.
+
+bool Visible [readonly]
+
+Determines whether a Point is rendered.
+
+bool HasColorOverride
+Toggles the overriding of a Point's color. Used when rendering a Point using a triangulated
+PolylineDynamic.
+
+Color3 ColorOverride
+
+Overrides a Point's color when EHC is true.
+
+Vector3 ColorOverrideVec3 [writeonly]
+
+Sets [YRIEEIREE Using a Vector3. Write-only.
+
+number ColorOverrideOpacity
+
+Determines the opacity of a Point's override color.
+Class: DrawEntryDynamic
+
+Properties
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+void DrawEntryDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+DrawEntryDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: LineDynamic
+
+Static Methods
+
+LineDynamic LineDynamic.new()
+
+LineDynamic LineDynamic.new(pl: Point, p2: Point)
+
+Properties
+
+float Thickness
+Determines the thickness of a LineDynamic in pixels.
+
+Point From
+
+Determines the starting of a LineDynamic.
+
+Point To
+
+Determines the end of a LineDynamic.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+bool Outlined
+
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from DrawEntryDynamic:
+
+LineDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+LineDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: PolyLineDynamic
+
+Static Methods
+
+PolyLineDynamic PolyLineDynamic.new(points?: table)
+
+Properties
+
+float Thickness
+
+Determines the thickness of a PolyLineDynamic in pixels.
+
+PolyLineFillType FillType
+
+Determines how a PolyLineDynamic is filled.
+
+Points
+
+The array of points that makeup a PolyLineDynamic.
+
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+PolyLineDynamic:ReTriangulate()
+
+Used to re-triangulate a PolyLineDynamic when 'FillType' is set to
+
+PolyLineFillType.Triangulated}
+
+PolyLineDynamic:SetPoints(points: table)
+
+Sets a PolyLineDynamic's points.
+
+Inherited from DrawEntryDynamic:
+
+PolyLineDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+PolyLineDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: TextDynamic
+
+Static Methods
+
+TextDynamic TextDynamic.new(point?: Point)
+
+Properties
+
+string Text
+
+Determines the text to be displayed.
+
+Vector2 TextBounds [readonly]
+
+Indicates the Vector2 space occupied by a TextDynamic.
+
+number Size
+Determines the font size of a TextDynamic's text.
+Drawing.Fonts Font
+Determines the font of a TextDynamic's text.
+
+Point Position
+
+Determines the of a TextDynamic object.
+
+XAlignment XAlignment
+Determines the x-axis alignment of a TextDynamic's position.
+
+YAlignment YAlignment
+
+Determines the y-axis alignment of a TextDynamic's position.
+
+XAlignment TextXAlignment
+
+Determines the x-axis alignment of a TextDynamic's text when there are multiple lines.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from
+
+TextDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+TextDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: CircleDynamic
+
+Static Methods
+
+CircleDynamic CircleDynamic.new(point?: Point)
+
+Properties
+
+number Thickness
+
+Determines the thickness of a CircleDynamic.
+
+int NumSides
+
+Determines the number of segments that make up a CircleDynamic.
+
+number Radius
+
+Determines the radius of a CircleDynamic. Only used if eg is nil.
+
+bool Filled
+
+Determines whether a CircleDynamic is filled.
+
+Point Position
+
+Determines a CircleDynamic's center (eile
+
+Point Edge
+
+Determines a CircleDynamic's edge (elie. If this field is set to nil, is used.
+
+XAlignment XAlignment
+
+YAlignment YAlignment
+
+Inherited from
+
+bool Visible
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from
+
+CircleDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+CircleDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: RectDynamicBase
+
+Properties
+
+Vector2 Size
+
+A RectDynamicBase's size. Only used if is not set.
+
+Point Position
+The RectDynamicBase root position.
+
+Point BottomRight
+
+If set, the bottom-right corner of the aT UIA EE. When ised, ignores alignment
+and is used as the top-left corner.
+
+XAlignment XAlignment
+
+How a RectDynamicBase is aligned on the x-axis relative to its Position.
+
+YAlignment YAlignment
+
+How a RectDynamicBase is aligned on the y-axis relative to its Position.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+bool Outlined
+
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from DrawEntryDynamic:
+
+RectDynamicBase:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+RectDynamicBase:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: RectDynamic
+
+Static Methods
+
+RectDynamic RectDynamic.new(point?: Point)
+
+Properties
+
+number Thickness
+
+The thickness of a RectDynamic, in pixels.
+
+bool Filled
+
+Whether or not a RectDynamic is filled.
+
+number Rounding
+
+Describes the roundness of a RectDynamic's corners.
+
+Inherited from RectDynamicBase:
+
+Vector2 Size
+A RectDynamicBase's size. Only used if is not set.
+
+Point Position
+
+The RectDynamicBase root position.
+
+Point BottomRight
+
+If set, the bottom-right corner of the aT UELA TEE. When ised, ignores alignment
+and is used as the top-left corner.
+
+XAlignment XAlignment
+
+How a RectDynamicBase is aligned on the x-axis relative to its Position.
+YAlignment YAlignment
+
+How a RectDynamicBase is aligned on the y-axis relative to its Position.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from
+RectDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+RectDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: GradientRectDynamic
+
+Static Methods
+
+GradientRectDynamic GradientRectDynamic.new(point?: Point)
+
+Properties
+
+Color3 ColorUpperLeft
+
+Describes a GradientRectDynamic's upper-left color.
+
+Color3 ColorUpperRight
+
+Describes a GradientRectDynamic's upper-right color.
+
+Color3 ColorBottomLeft
+
+Describes a GradientRectDynamic's bottom-left color.
+
+Color3 ColorBottomRight
+
+Describes a GradientRectDynamic's bottom-right color.
+
+number OpacityUpperlLeft
+
+Describes a GradientRectDynamic's upper-left opacity.
+
+number OpacityUpperRight
+Describes a GradientRectDynamic's upper-right opacity.
+
+number OpacityBottomLeft
+
+Describes a GradientRectDynamic's bottom-left opacity.
+
+number OpacityBottomRight
+
+Describes a GradientRectDynamic's bottom-right opacity.
+number Opacity
+
+Affects the overall opacity of a GradientRectDynamic.
+
+Inherited from
+
+Vector2 Size
+
+A RectDynamicBase's size. Only used if is not set.
+
+Point Position
+
+The RectDynamicBase root position.
+
+Point BottomRight
+
+If set, the bottom-right corner of the TSI ELA EEN. When ised, ignores alignment
+and is used as the top-left corner.
+
+XAlignment XAlignment
+
+How a RectDynamicBase is aligned on the x-axis relative to its Position.
+
+YAlignment YAlignment
+How a RectDynamicBase is aligned on the y-axis relative to its Position.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+Color3 Color
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from DrawEntryDynamic:
+
+GradientRectDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+GradientRectDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: ImageDynamic
+
+Static Methods
+
+ImageDynamic ImageDynamic.new(point?: Point)
+
+Properties
+
+Image [writeonly]
+
+Sets the raw image data for an ImageDynamic. Write-only.
+
+Vector2 ImageSize [readonly]
+
+Returns the dimensions of the image held by the Image property.
+
+number Rounding
+Indicates the roundness of an ImageDynamic.
+
+Inherited from RectDynamicBase:
+
+Vector2 Size
+A RectDynamicBase's size. Only used if is not set.
+
+Point Position
+
+The RectDynamicBase root position.
+
+Point BottomRight
+
+If set, the bottom-right corner of the ae ELA TE. When ised, ignores alignment
+and is used as the top-left corner.
+
+XAlignment XAlignment
+
+How a RectDynamicBase is aligned on the x-axis relative to its Position.
+YAlignment YAlignment
+
+How a RectDynamicBase is aligned on the y-axis relative to its Position.
+Inherited from
+
+bool Visible
+
+Determines whether a DrawEntryDynamic will be rendered.
+
+int ZIndex
+Determines the order in which a DrawEntryDynamic is rendered relative to other GUIs.
+
+float Opacity
+
+Avalue between 0 and 1 that indicates the opacity of a DrawEntryDynamic.
+
+Color3 Color
+
+Determines the color of a DrawEntryDynamic.
+
+bool Outlined
+Whether a DrawEntryDynamic is outlined.
+
+number OutlineOpacity
+
+A value between 0 and 1 that indicates the opacity of a DrawEntryDynamic's outline.
+
+number OutlineThickness
+
+The thickness of a DrawEntryDynamic's outline, in pixels.
+
+Color3 OutlineColor
+
+The color of a DrawEntryDynamic's outline.
+
+Methods
+
+Inherited from
+ImageDynamic:MoveToFront()
+
+Moves a DrawEntryDynamic to the front of the current ZIndex's draw list.
+
+ImageDynamic:MoveToBack()
+
+Moves a DrawEntryDynamic to the back of the current ZIndex's draw list.
+Class: ImageRef
+
+Static Methods
+
+ImageRef ImageRef.new()
+
+Properties
+
+Vector2 ImageSize [readonly]
+
+number SpeedMultiplier
+Class: RenderObject
+
+Properties
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Class: RenderButton
+
+Properties
+
+Label
+
+Determines a RenderButton's text label.
+
+Vector2 Size
+
+Determines the size of a RenderButton.
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderButton.OnUpdated()
+
+Fires on button-press.
+Class: RenderColorButton
+
+Properties
+
+Description
+
+Determines the description RenderColorButton when you hover over it.
+
+Vector2 Size
+
+Determines the size of a RenderColorButton.
+
+Color3 Color
+
+Describes the color of a RenderColorButton.
+
+number Alpha
+
+A RenderColorButton's opacity.
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderColorButton.OnUpdated()
+
+Fires on button-press.
+Class: RenderCheckBox
+
+Properties
+
+Label
+
+Determines a RenderCheckBox's text label.
+
+bool Value
+
+Whether a RenderCheckBox is checked.
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderCheckBox.0OnUpdated()
+
+Fires on checkbox-toggle.
+Class: RenderColorPicker
+
+Properties
+
+Label
+
+Determines a RenderColorPicker's text label.
+
+Color3 Color
+
+The currently selected color.
+
+number Alpha
+
+The currently selected alpha value.
+
+bool UseAlpha
+
+Toggles a RenderColorPicker's alpha picker.
+
+bool ReturnInt
+
+Affects the arguments passed to the event. Default true.
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderColorPicker.OnUpdated(r:
+
+Fired upon color change. If (Raat is true, [§ 8 § and § are integer values (0-255).
+Class: RenderCombo
+
+Properties
+
+Label
+
+The RenderCombo's label.
+
+Items
+
+An array of strings representing a RenderCombo's choices.
+
+int SelectedItem
+
+The index of the currently selected combo item.
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderCombo.OnUpdated(new_selection: tint)
+
+Fired upon a change in selection.
+Class: RenderDrag
+
+Properties
+
+Label
+
+A RenderDrag's label.
+
+number Speed
+
+The drag input's scaling speed.
+
+number Min
+
+The drag input's minimum value.
+
+number Max
+
+The drag input's maximum value.
+
+number Value
+
+The current value of the drag input.
+
+bool Clamped
+
+Determines whether should be clamped to [{H) @E when set manually.
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderDrag.OnUpdated(new_value:
+
+Fired upon a change in value.
+Class: RenderintDrag
+
+Properties
+
+Label
+
+A RenderIntDrag's label.
+
+number Speed
+
+The drag input's scaling speed.
+
+number Min
+
+The drag input's minimum value.
+
+number Max
+
+The drag input's maximum value.
+
+number Value
+
+The current value of the drag input.
+
+bool Clamped
+
+Determines whether should be clamped to [{H) (E when set manually.
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderIntDrag.0OnUpdated(new_value:
+
+Fired upon a change in value.
+Class: RenderTextBox
+
+Properties
+
+Label
+
+The RenderTextBox's label.
+
+int MaxTextLength
+
+The text box's max length, a number between 0 and 16384, inclusive. Defaults to 16384.
+
+Value
+
+The RenderTextBox's text input.
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderTextBox.0OnUpdated(new_selection: 1int)
+
+Fired upon a change in text.
+Class: RenderSeparator
+
+Properties
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObject is displayed.
+Class: RenderSlider
+
+Properties
+
+Label
+
+A RenderSlider's label.
+
+number Min
+
+The slider's minimum value.
+
+number Max
+
+The slider's maximum value.
+
+The current value of the slider.
+
+bool Clamped
+
+Determines whether should be clamped to [{§f§ ER when set manually with Ctrl+Click.
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderSlider.0OnUpdated(new_value: )
+
+Fired upon a change in value.
+Class: RenderintSlider
+
+Properties
+
+Label
+
+A RenderIntSlider's label.
+
+int Min
+
+The slider's minimum value.
+
+int Max
+
+The slider's maximum value.
+
+int Value
+
+The current value of the slider.
+
+bool Clamped
+
+Determines whether should be clamped to [i ER when set manually with Ctrl+Click.
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderIntSlider.OnUpdated(new_value: int)
+
+Fired upon a change in value.
+Class: RenderSelectable
+
+Properties
+
+Label
+
+A RenderSelectable's label.
+
+Vector2 Size
+
+A RenderSelectable's size.
+
+bool Value
+
+Whether this RenderSelectable is selected.
+
+bool Toggles
+
+Determines whether selecting the RenderSelectable toggles FTI
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Events
+
+RenderSelectable.OnUpdated (new_value: bool)
+
+Fired upon a change in value.
+Class: RenderChildBase
+
+Properties
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+RenderChildBase:Clear()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderChildBase:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderChildBase: SetColor (option: RenderColorOption, color: Color3, alpha:
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderChildBase:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderChildBase:CheckBox()
+
+Creates a child object.
+
+RenderColorPicker RenderChildBase:ColorPicker()
+
+Creates a child object.
+RenderColorButton RenderChildBase:ColorButton()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderCombo RenderChildBase:Combo()
+
+RenderTextBox RenderChildBase:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderChildBase:Label()
+
+Creates a child object.
+
+RenderSlider RenderChildBase:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderChildBase:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderChildBase:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderChildBase:Separator()
+
+Creates a child abject.
+
+RenderTabMenu RenderChildBase:TabMenu()
+
+Creates a child object.
+
+RenderSameLine RenderChildBase:SameLine()
+Creates a RenderSameLine child object.
+
+RenderFont RenderChildBase:WithFont()
+
+Creates a RenderFont child object.
+
+RenderIndent RenderChildBase:Indent()
+
+Creates a RenderIindent child object.
+
+RenderCollapsable RenderChildBase:Collapsable()
+
+Creates a RenderCollapsable child object.
+
+RenderChildWindow RenderChildBase:Child()
+
+Creates a RenderChildWindow child object.
+
+RenderDummyWindow RenderChildBase:Dummy()
+
+Creates a RenderDummyWindow child object.
+Class: RenderTabMenu
+
+Properties
+
+int SelectedItem
+
+The index of the selected tab, or zero if none are selected.
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObject is displayed.
+
+Methods
+
+RenderTabMenu:SetTabStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderTabMenu's tabs.
+
+RenderTabMenu:SetTabColor (option: RenderColorOption, color: Color3, alpha:
+)
+
+Sets a color option for this RenderTabMenu's tabs.
+
+RenderDummyWindow RenderTabMenu:Add (label: ))
+
+Creates a new tab.
+
+Inherited from
+
+RenderTabMenu: Clear ()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderTabMenu:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderTabMenu: SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderTabMenu:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderTabMenu:CheckBox()
+
+Creates a child object.
+
+RenderColorPicker RenderTabMenu:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderTabMenu:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderTabMenu:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderTabMenu:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderTabMenu:Label()
+
+Creates a child object.
+
+RenderSlider RenderTabMenu:Slider()
+
+Creates a child object.
+RenderIntSlider RenderTabMenu:IntSlider()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderSelectable RenderTabMenu:Selectable()
+
+RenderSeparator RenderTabMenu:Separator()
+
+Creates a child object.
+
+RenderTabMenu RenderTabMenu:TabMenu()
+
+Creates a child object.
+
+RenderSameLine RenderTabMenu:SameLine()
+
+Creates a child object.
+
+RenderFont RenderTabMenu:WithFont()
+
+Creates a child object.
+
+RenderIndent RenderTabMenu:Indent()
+
+Creates a child object.
+
+RenderCollapsable RenderTabMenu:Collapsable()
+
+Creates a child object.
+
+RenderChildWindow RenderTabMenu:Child()
+
+Creates a child object.
+
+RenderDummyWindow RenderTabMenu:Dummy ()
+Creates a RenderDummyWindow child object.
+
+Events
+
+RenderTabMenu.OnUpdated(new_tab_index: int)
+
+Fired upon tab change.
+Class: RenderCollapsable
+
+Properties
+
+HeaderLabel
+
+The header label of the RenderCollapsable.
+
+bool DefaultOpen [readonly]
+Whether this RenderCollapsable was set to be open by default.
+
+SynSignal OnUpdated
+
+Fired when the state of the RenderCollapsable changes from open to closed or vice versa.
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+Inherited from
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderCollapsable:Clear()
+
+RenderCollapsable:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderCollapsable: SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+RenderButton RenderCollapsable:Button()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderCheckBox RenderCollapsable:CheckBox()
+
+RenderColorPicker RenderCollapsable:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderCollapsable:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderCollapsable:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderCollapsable:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderCollapsable:Label()
+
+Creates a child object.
+
+RenderSlider RenderCollapsable:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderCollapsable:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderCollapsable:Selectable()
+Creates a child object.
+
+RenderSeparator RenderCollapsable:Separator()
+
+Creates a child object.
+
+RenderTabMenu RenderCollapsable:TabMenu()
+
+Creates a child object.
+
+RenderSameLine RenderCollapsable:SameLine()
+
+Creates a child object.
+
+RenderFont RenderCollapsable:WithFont()
+
+Creates a child object.
+
+RenderIndent RenderCollapsable:Indent()
+
+Creates a child object.
+
+RenderCollapsable RenderCollapsable:Collapsable()
+
+Creates a child object.
+
+RenderChildWindow RenderCollapsable:Child()
+
+Creates a child object.
+
+RenderDummyWindow RenderCollapsable:Dummy()
+
+Creates a child object.
+Class: RenderChildWindow
+
+Properties
+
+Vector2 Size
+
+The size of the child window.
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObject is displayed.
+
+Methods
+
+Inherited from
+
+RenderChildwWindow: Clear ()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderChildWindow:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderChildWindow: SetColor (option: RenderColorOption, color: Color3, alpha:
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderChildWindow:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderChildWindow:CheckBox()
+Creates a child object.
+
+RenderColorPicker RenderChildWindow:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderChildWindow:ColorButton()
+
+Creates a child object.
+
+Creates a child object.
+
+Creates a child object.
+
+Creates a child object.
+
+RenderCombo RenderChildwWindow: Combo ()
+
+RenderTextBox RenderChildWindow:TextBox()
+
+RenderLabel RenderChildWindow:Label()
+
+RenderSlider RenderChildWindow:S1lider()
+
+Creates a child object.
+
+RenderIntSlider RenderChildWindow:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderChildWindow:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderChildWindow:Separator()
+
+Creates a child object.
+RenderTabMenu RenderChildWindow:TabMenu()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderSameLine RenderChildWindow:SamelLine()
+
+RenderFont RenderChildWindow:WithFont()
+
+Creates a child object.
+
+RenderIndent RenderChildWindow:Indent()
+
+Creates a child object.
+
+RenderCollapsable RenderChildWindow:Collapsable()
+
+Creates a child object.
+
+RenderChildWindow RenderChildWindow:Child()
+
+Creates a child object.
+
+RenderDummyWindow RenderChildWindow:Dummy ()
+
+Creates a child object.
+Class: RenderSameline
+
+Properties
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+Inherited from
+
+RenderSamelLine:Clear()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderSameLine:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderSameLine:SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderSameLine:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderSameline:CheckBox()
+
+Creates a child object.
+
+RenderColorPicker RenderSameLine:ColorPicker()
+Creates a child object.
+
+RenderColorButton RenderSameLine:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderSameLine:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderSamel-ine:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderSameLine:Label()
+
+Creates a child object.
+
+RenderSlider RenderSameLine:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderSamelLine:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderSamelLine:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderSameLine:Separator()
+
+Creates a child object.
+
+RenderTabMenu RenderSameLine:TabMenu()
+
+Creates a child object.
+RenderSameLine RenderSameLine:SamelLine()
+
+Creates a RenderSameLine child object.
+
+Creates a RenderFont child object.
+
+RenderFont RenderSameline:WithFont()
+
+RenderIndent RenderSameLine:Indent()
+
+Creates a RenderIndent child object.
+
+RenderCollapsable RenderSameLine:Collapsable()
+
+Creates a RenderCollapsable child object.
+
+RenderChildWindow RenderSameLine:Child()
+
+Creates a RenderChildWindow child object.
+
+RenderDummyWindow RenderSameLine:Dummy ()
+
+Creates a RenderDummyWindow child object.
+Class: Renderindent
+
+Properties
+
+number Pixels
+
+The amount of pixels to indent. A negative number of pixels outdents; i.e. goes to the left
+instead of to the right. Indents by the IndentSpacing style if Pixels is zero.
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+Inherited from
+
+RenderIndent:Clear()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderIndent:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderIndent:SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderIndent:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderIndent:CheckBox()
+Creates a child object.
+
+RenderColorPicker RenderIndent:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderIndent:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderIndent:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderIndent:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderIndent:Label()
+
+Creates a child object.
+
+RenderSlider RenderIndent:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderIndent:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderIndent:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderIndent:Separator()
+
+Creates a child object.
+RenderTabMenu RenderIndent:TabMenu()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderSamelLine RenderIndent:SameLine()
+
+RenderFont RenderIndent:WithFont()
+
+Creates a child object.
+
+RenderIndent RenderIndent:Indent()
+
+Creates a child object.
+
+RenderCollapsable RenderIndent:Collapsable()
+
+Creates a child object.
+
+RenderChildWindow RenderIndent:Child()
+
+Creates a child object.
+
+RenderDummyWindow RenderIndent:Dummy ()
+
+Creates a child object.
+Class: RenderFont
+
+Properties
+
+DrawFont Font
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+Inherited from
+
+RenderFont:Clear()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderFont:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderFont:SetColor (option: RenderColorOption, color: Color3, alpha:
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderFont:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderFont:CheckBox()
+
+Creates a child object.
+RenderColorPicker RenderFont:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderFont:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderFont:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderFont:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderFont:Label()
+
+Creates a child object.
+
+RenderSlider RenderFont:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderFont:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderFont:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderFont:Separator()
+
+Creates a child object.
+
+RenderTabMenu RenderFont:TabMenu()
+Creates a RenderTabMenu child object.
+
+RenderSameLine RenderFont:SamelLine()
+
+Creates a RenderSameLine child object.
+
+RenderFont RenderFont:WithFont()
+
+Creates a RenderFont child object.
+
+RenderIndent RenderFont:Indent()
+
+Creates a Renderlndent child object.
+
+RenderCollapsable RenderFont:Collapsable()
+
+Creates a RenderCollapsable child object.
+RenderChildWindow RenderFont:Child()
+Creates a RenderChildWindow child object.
+
+RenderDummyWindow RenderFont:Dummy ()
+
+Creates a RenderDummyWindow child object.
+Class: RenderPopup
+
+Properties
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+RenderPopup: Show()
+
+Shows this popup window.
+
+Inherited from
+
+RenderPopup:Clear()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderPopup:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderPopup:SetColor (option: RenderColorOption, color: Color3, alpha:
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderPopup:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderPopup:CheckBox()
+Creates a child object.
+
+RenderColorPicker RenderPopup:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderPopup:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderPopup:Combo()
+
+Creates a child object.
+
+RenderTextBox RenderPopup:TextBox()
+
+Creates a child object.
+
+RenderlLabel RenderPopup:Label()
+
+Creates a child object.
+
+RenderSlider RenderPopup:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderPopup:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderPopup:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderPopup:Separator()
+
+Creates a child object.
+RenderTabMenu RenderPopup:TabMenu()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderSameLine RenderPopup:SameLine()
+
+RenderFont RenderPopup:WithFont()
+
+Creates a child object.
+
+RenderIndent RenderPopup:Indent()
+
+Creates a child object.
+
+RenderCollapsable RenderPopup:Collapsable()
+
+Creates a child object.
+
+RenderChildWindow RenderPopup:Child()
+
+Creates a child object.
+
+RenderDummyWindow RenderPopup:Dummy ()
+
+Creates a child object.
+Class: RenderDummyWindow
+
+Properties
+
+Inherited from
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+
+Methods
+
+Inherited from
+
+RenderDummyWindow: Clear ()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderDummyWindow:SetStyle(option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderDummyWindow: SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderDummyWindow:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderDummyWindow:CheckBox()
+
+Creates a child object.
+
+RenderColorPicker RenderDummyWindow:ColorPicker()
+Creates a child object.
+
+RenderColorButton RenderDummyWindow:ColorButton()
+
+Creates a child object.
+
+RenderCombo RenderDummyWindow: Combo ()
+
+Creates a child object.
+
+RenderTextBox RenderDummyWindow:TextBox()
+
+Creates a child object.
+
+RenderLabel RenderDummyWindow:Label()
+
+Creates a child object.
+
+RenderSlider RenderDummyWindow:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderDummyWindow:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderDummyWindow:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderDummyWindow:Separator()
+
+Creates a child object.
+
+RenderTabMenu RenderDummyWindow:TabMenu()
+
+Creates a child object.
+RenderSamelLine RenderDummyWindow:SameLine()
+
+Creates a RenderSamelLine child object.
+
+Creates a RenderFont child object.
+
+RenderFont RenderDummyWindow:WithFont()
+
+RenderIndent RenderDummyWindow:Indent()
+
+Creates a Renderindent child object.
+
+RenderCollapsable RenderDummyWindow:Collapsable()
+
+Creates a RenderCollapsable child object.
+
+RenderChildWindow RenderDummyWindow:Child()
+
+Creates a RenderChildWindow child object.
+
+RenderDummyWindow RenderDummyWindow:Dummy ()
+
+Creates a RenderDummyWindow child object.
+Class: RenderWindow
+
+Static Methods
+
+RenderWindow RenderWindow.new(window_name: )
+
+Properties
+
+WindowName [readonly]
+
+The window's name.
+
+Vector2 MinSize
+
+A RenderWindow's minimum size.
+
+Vector2 MaxSize
+
+A RenderWindow's maximum size.
+
+Vector2 DefaultSize
+
+The initial size of the RenderWindow.
+
+bool CanResize
+
+Determines whether this RenderWindow can be resized.
+
+bool VisibilityOverride
+
+Unties the window's visibility from that of the internal Ul, and instead uses the field.
+
+Best used with (YTISSm——
+
+Inherited from RenderObject:
+
+bool Visible
+
+Determines whether a RenderObiject is displayed.
+Methods
+
+RenderWindow: Emplace (new_name?: )
+
+If the window is not already in the render list, add it. Optionally changes the title window.
+
+Inherited from
+
+RenderWindow: Clear ()
+
+Removes all sub-objects from this RenderChildBase.
+
+RenderWindow: SetStyle (option: RenderStyleOption, value: float|Vector2)
+
+Sets a style option for this RenderChildBase.
+
+RenderWindow: SetColor (option: RenderColorOption, color: Color3, alpha:
+
+)
+
+Sets a color option for this RenderChildBase.
+
+RenderButton RenderWindow:Button()
+
+Creates a child object.
+
+RenderCheckBox RenderWindow:CheckBox()
+
+Creates a child object.
+
+RenderColorPicker RenderWindow:ColorPicker()
+
+Creates a child object.
+
+RenderColorButton RenderWindow:ColorButton()
+
+Creates a child object.
+RenderCombo RenderWindow:Combo()
+
+Creates a child object.
+
+Creates a child object.
+
+RenderTextBox RenderWindow:TextBox()
+
+RenderLabel RenderWindow:Label()
+
+Creates a child object.
+
+RenderSlider RenderWindow:Slider()
+
+Creates a child object.
+
+RenderIntSlider RenderWindow:IntSlider()
+
+Creates a child object.
+
+RenderSelectable RenderWindow:Selectable()
+
+Creates a child object.
+
+RenderSeparator RenderWindow: Separator ()
+
+Creates a child object.
+
+RenderTabMenu RenderWindow:TabMenu()
+
+Creates a child object.
+
+RenderSameLine RenderWindow:SameLine()
+
+Creates a child object.
+
+RenderFont RenderWindow:WithFont()
+Creates a RenderFont child object.
+
+RenderIndent RenderWindow:Indent()
+
+Creates a Renderindent child object.
+
+RenderCollapsable RenderWindow:Collapsable()
+
+Creates a RenderCollapsable child object.
+
+RenderChildWindow RenderWindow:Child()
+
+Creates a RenderChildWindow child object.
+
+RenderDummyWindow RenderWindow:Dummy ()
+
+Creates a RenderDummyWindow child object.
+Class: FilterBase
+Class: NotFilter
+
+Static Methods
+
+NotFilter NotFilter.new(target: FilterBase)
+
+Properties
+
+FilterBase Target
+Class: AnyfFilter
+
+Static Methods
+
+AnyFilter AnyFilter.new(filters?: table)
+
+Properties
+
+A list of filters.
+Class: AllFilter
+
+Static Methods
+
+AllFilter AllFilter.new(filters?: table)
+
+Properties
+
+A list of filters.
+Class: TypeFilter
+
+Static Methods
+
+TypeFilter TypeFilter.new(index: int, type:
+
+Properties
+
+int ArgumentIndex
+
+ArgumentType
+Class: NamecallFilter
+
+Static Methods
+
+NamecallFilter NamecallFilter.new(method: )
+
+Properties
+
+NamecallMethod
+Class: InstanceTypeFilter
+
+Static Methods
+
+InstanceTypeFilter InstanceTypeFilter.new(argument_index: int, instance_type:
+
+)
+
+Properties
+
+InstanceType
+
+int ArgumentIndex
+Class: UserdataTypeFilter
+
+Static Methods
+
+UserdataTypeFilter UserdataTypeFilter.new(argument_index: int, userdata_type:
+
+userdata)
+
+Properties
+
+userdata UserdataType [writeonly]
+
+int ArgumentIndex
+Class: ArgumentFilter
+
+Static Methods
+
+ArgumentFilter ArgumentFilter.new(argument_index: int, argument:
+
+Properties
+
+int ArgumentIndex
+any Argument
+
+boolean StripNull
+Class: ArgCountFilter
+
+Static Methods
+
+ArgCountFilter ArgCountFilter.new(argument_count: int)
+
+Properties
+
+int ArgumentCount
+Class: CallerFilter
+
+Static Methods
+
+CallerFilter CallerFilter.new(invert: bool)
+
+Properties
+
+bool Invert
+Class: SynSignal
+
+Static Methods
+
+SynSignal SynSignal.new()
+
+Creates a new SynSignal that can be called with (JRIZ38).
+
+Methods
+
+SynConnection SynSignal:Connect(f: function
+
+Connects a listener to this signal. Errors if called on a Lua state different to the one used to
+create this signal.
+
+SynSignal:Wait() [yields]
+
+Yields the current thread until the next time this signal is fired. Returns any invocation
+parameters. Errors if called on a Lua state different to the one used to create this signal.
+
+SynSignal:Fire(...any)
+
+Fires this signal. Only usable when this signal is created via SESFEGEIMIEIS). Equivalent
+behavior exists via the metamethod; i.e. instead of SEHR ICTIETIEY) You can also do
+
+sig(1, 2, 3)]
+Class: SynConnection
+
+Methods
+
+SynConnection:Disconnect()
+
+Disconnects this connection from its SY EREGEL
+Class: ProtoProxy
+
+A wrapper around the internal structure that describes a Lua function.
+
+Properties
+
+int CodeHash
+
+A fingerprint of this Proto's bytecode.
+
+Class: ReadonlyTableProxy
+
+Provides recursive read-only access to a table.
+Class: LuaStateProxy
+
+Represents a Lua state.
+
+Static Methods
+
+LuaStateProxy LuaStateProxy.new()
+
+Properties
+
+int Id [readonly]
+
+An identifier for this Lua state.
+
+bool IsActorState [readonly]
+
+Whether this state was created for use by Actors.
+
+Methods
+
+table LuaStateProxy:GetActors()
+
+Returns a list of Actor instances associated with this Lua state.
+
+LuaStateProxy:Execute (source: sy +ssany)
+
+Schedules code to be executed on this Lua state.
+
+Events
+
+LuaStateProxy.Event()
+
+A generic event for communication between Lua states.
+Class: Match
+
+Properties
+
+A list of captures. Each capture table has the substring, the start index, and the length, in that
+order. The first capture is the entire matched expression.
+
+Class: Regex
+
+Static Methods
+
+Regex Regex.new(pattern: )
+
+Constructs a new object. Errors if the pattern is invalid.
+
+Regex.Escape(contents: )
+
+Escapes a string for use by regex.
+
+Methods
+
+Match | nil Regex:Match(contents: )
+
+Matches against this Regex object and returns the first or nil if no match was
+
+—
+Oo
+Cc
+3
+[oF
+
+table Regex:MatchMany (contents: ))
+
+Matches against this Regex object and returns all {Exfages found.
+
+Regex :Replace (contents: , replace_with:
+
+Replaces the first match of this Regex object in (Wiliel replace _with}
+Class: Duration
+
+A time duration
+
+Static Methods
+
+Duration Duration.TimeSinceEpoch()
+Returns the time difference between the Unix epoch and now.
+
+Duration Duration.FromNanoseconds (nanoseconds: {int)
+
+Duration Duration.FromMicroseconds (microseconds:
+
+Duration Duration.FromMilliseconds(milliseconds:
+
+Duration Duration.FromSeconds(seconds: int)
+Duration Duration.FromMinutes(minutes: int)
+Duration Duration.FromHours (hours: int)
+
+Duration Duration.FromDays(days: int)
+
+Duration Duration.FromMonths(months: int)
+
+Duration Duration.FromYears(years: int)
+
+Properties
+
+number Nanoseconds [readonly]
+
+This Duration in nanoseconds.
+number Microseconds [readonly]
+
+This Duration in microseconds.
+
+number Milliseconds [readonly]
+
+This Duration in milliseconds.
+
+number Seconds [readonly]
+
+This Duration in seconds.
+
+number Minutes [readonly]
+
+This Duration in minutes.
+
+number Hours [readonly]
+
+This Duration in hours.
+
+number Days [readonly]
+This Duration in days.
+
+number Months [readonly]
+
+This Duration in months.
+
+number Years [readonly]
+
+This Duration in years.
+Class: Stopwatch
+
+A stopwatch
+
+Static Methods
+
+Stopwatch Stopwatch.new()
+
+Properties
+
+Duration ElapsedTime [readonly]
+
+The elapsed time between Start() and Stop(} calls.
+
+Methods
+
+Stopwatch:Start()
+
+Starts the stopwatch.
+
+Stopwatch:Stop()
+
+Stops the stopwatch.
+
+Stopwatch:Reset()
+
+Resets the stopwatch.
+Class: Timer
+
+A timer
+
+Static Methods
+
+Timer Timer.new()
+
+Properties
+
+bool Enabled
+
+Whether this Timer is enabled.
+
+int RepetitionCount
+
+How many times this timer should repeat, or @l if it should repeat indefinitely.
+
+Duration Interval
+
+The interval between EES: invocations.
+
+Duration TimeLeft [readonly]
+The time left before the timer elapses.
+
+Duration LastElapsed [readonly]
+
+A timestamp (time since epoch) of the last elapse.
+
+Events
+
+Timer .OnElapsed(delta: Duration)
+
+Fired every elapse.
+Class: Value
+
+Holds a value
+
+Static Methods
+
+Value Value.new(value: ))
+
+Methods
+
+Value:Get()
+
+Returns the underlying value.
+
+Value: (value:
+
+Sets the underlying value.
+Class: WebsocketClient
+
+A websocket client
+
+Static Methods
+
+WebsocketClient WebsocketClient.new(url_connection_string:
+
+Properties
+
+Url [readonly]
+
+Methods
+
+WebsocketClient:Disconnect() [yields]
+
+Disconnects the websocket. Yields until the client is fully disconnected.
+
+WebsocketClient:Connect(connection_info: table) [yields]
+
+Connects the websocket. may contain the following:
+
+Header Description Default
+Headers A map of header names to header values. {3
+Cookies A map of cookie names to cookie values. {
+
+In addition to any user-specified headers,   will add SESE: Slam late
+and SEE Cl akally os specified here,
+
+WebsocketClient:Send (message: , is_binary?: bool = False)
+
+Sends a payload.
+
+Events
+WebsocketClient.DataReceived (payload: , is_binary: bool)
+
+Fires when data is received.
+
+WebsocketClient.ConnectionClosed()
+
+Fires when the connection is closed. Can be for reasons other than :Disconnect(); i.e. on a
+sudden loss of connection.
+Class: DirectoryWatcher
+
+A filesystem monitor.
+
+Static Methods
+
+DirectoryWatcher DirectoryWatcher.new(Path: string, Recursive?: boolean)
+
+Properties
+
+string Path [readonly]
+The path targeted by this DirectoryWatcher.
+
+boolean Recursive
+
+Determines whether the DirectoryWatcher watches directories recursively or not. Defaults to
+unless explicitly specified otherwise in the constructor.
+
+Events
+
+DirectoryWatcher.OnChanged()
+
+Fires on file contents being changed.
+
+DirectoryWatcher.OnCreated()
+
+Fires on a file being created.
+
+DirectoryWatcher.OnDeleted()
+
+Fires on a file being deleted.
+
+DirectoryWatcher.OnRenamed()
+
+Fires on a file being renamed.
+DirectoryWatcher.OnOverflow()
+
+This event is called when there are too many directory changes at once, and exists due to a
+fundamental flaw in the Windows API. An internal workaround is possible but would be
+relatively memory-intensive, so this is the "fix" used for now. It is called for every currently
+active DirectoryWatcher. Cases where this happens are relatively rare, but may still exist; e.g. in
+the case of batch depletions of large folders. Users are recommended to treat this as a change
+to every relevant file.
+Enum Index
+
+CFrameRotationType
+
+Name Value
+
+CameraRelative 0
+
+TargetRelative 1
+
+Ignore 2
+
+Drawing.Fonts
+
+Name Value
+
+ul 0
+System 1
+Plex 2
+3
+
+Monospace
+
+PasswordDerivationMode
+
+Name Value
+
+Interactive 0
+Moderate 1
+
+Sensitive 2
+
+RenderColorOption
+
+Name Value
+
+Text
+
+TextDisabled
+
+WindowBg
+
+ChildBg
+
+PopupBg
+
+Border
+
+BorderShadow
+
+FrameBg
+
+FrameBgHovered
+
+FrameBgActive
+
+lol] |B~|lW]|N]—=]O
+
+TitleBg
+
+Name Value
+TitleBgActive 11
+TitleBgCollapsed 12
+MenuBarBg 13
+ScrollbarBg 14
+ScrollbarGrab 15
+ScrollbarGrabHovered 16
+ScrollbarGrabActive 17
+CheckMark 18
+SliderGrab 19
+SliderGrabActive 20
+Button 21
+ButtonHovered 22
+ButtonActive 23
+Header 24
+HeaderHovered 25
+HeaderActive 26
+Separator 27
+SeparatorHovered 28
+SeparatorActive 29
+ResizeGrip 30
+ResizeGripHovered 31
+ResizeGripActive 32
+Tab 33
+TabHovered 34
+TabActive 35
+TabUnfocused 36
+TabUnfocusedActive 37
+DockingPreview 38
+DockingEmptyBg 39
+PlotLines 40
+PlotLinesHovered 41
+PlotHistogram 42
+
+RenderStyleOption
+
+Name Value
+PlotHistogramHovered 43
+TableHeaderBg 44
+TableBorderStrong 45
+TableBorderLight 46
+TableRowBg 47
+TableRowBgAlt 48
+TextSelectedBg 49
+DragDropTarget 50
+NavHighlight 51
+NavWindowingHighlight 52
+NavWindowingDimBg 53
+ModalWindowDimBg 54
+
+Name Value
+
+Alpha 0
+WindowPadding 2
+WindowRounding 3
+WindowBorderSize 4
+WindowMinSize 5
+WindowTitleAlign 6
+ChildRounding 7
+ChildBorderSize 8
+PopupRounding 9
+PopupBorderSize 10
+FramePadding 11
+FrameRounding 12
+FrameBorderSize 13
+ItemSpacing 14
+IteminnerSpacing 15
+IndentSpacing 16
+CellPadding 17
+
+ScrollbarSize
+
+—_
+[0]
+
+Name Value
+
+ScrollbarRounding 19
+
+GrabMinSize 20
+
+GrabRounding 21
+
+TabRounding 22
+
+ButtonTextAlign 23
+
+SelectableTextAlign 24
+
+ToastType
+
+Name Value
+
+None 0
+
+Success
+
+Warning
+
+Error
+
+AlWIN] =
+
+Info
+
+UserEncryptionMode
+
+Name Value
+
+SynAccount 0
+
+WindowsAccount 1
+
+WindowsMachine 2
+
+XAlignment
+
+Name Value
+Left 0
+Right 1
+Center 2
+
+YAlignment
+
+Name Value
+Top 0
+Bottom 1
+
+Center 2
+
+
